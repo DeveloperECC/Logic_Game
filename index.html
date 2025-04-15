@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Cards - Juego Educativo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Logic Cards</h1>
+        <div class="buscador-container">
+            <div class="buscador">
+                <input type="text" id="buscador" placeholder="Ej: 'As', 'Reina', 'Corazones'...">
+                <div class="tooltip">ℹ️
+                    <span class="tooltiptext">Busca por valor (2-10, J, Q, K, A) o palo (corazones, diamantes, tréboles, picas)</span>
+                </div>
+            </div>
+            <select id="filtro">
+                <option value="all">Todos</option>
+                <option value="hearts">♥ Corazones</option>
+                <option value="diamonds">♦ Diamantes</option>
+                <option value="clubs">♣ Tréboles</option>
+                <option value="spades">♠ Picas</option>
+            </select>
+        </div>
+    </header>
+
+    <main id="app"><!-- Contenido dinámico --></main>
+
+    <nav class="menu-inferior">
+        <button onclick="mostrarInicio()">
+            <img src="https://raw.githubusercontent.com/tu-usuario/tu-repo/main/img/iconos/inicio.png" alt="Inicio" class="nav-icon">
+            <span>Inicio</span>
+        </button>
+        <button onclick="mostrarJuego()">
+            <img src="https://raw.githubusercontent.com/tu-usuario/tu-repo/main/img/iconos/juego.png" alt="Juego" class="nav-icon">
+            <span>Juego</span>
+        </button>
+        <button onclick="mostrarFavoritos()">
+            <img src="https://raw.githubusercontent.com/tu-usuario/tu-repo/main/img/iconos/favoritos.png" alt="Favoritos" class="nav-icon">
+            <span>Favoritos</span>
+        </button>
+        <button onclick="mostrarInformacion()">
+            <img src="https://raw.githubusercontent.com/tu-usuario/tu-repo/main/img/iconos/info.png" alt="Información" class="nav-icon">
+            <span>Info</span>
+        </button>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="js/conexion_api.js"></script>
+    <script src="js/buscador.js"></script>
+    <script src="js/favoritos.js"></script>
+    <script src="js/juego_educativo.js"></script>
+    <script src="js/pantalla_principal.js"></script>
+    <script src="js/informacion.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            iniciarBuscador();
+            mostrarInicio();
+        });
+    </script>
+</body>
+</html>
