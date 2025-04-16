@@ -12,10 +12,7 @@ async function mostrarJuego() {
                 <div class="operacion-actual">${operacionActual.simbolo || '?'}</div>
             </div>
             
-            <div class="cartas-juego">
-                <!-- Contenido se cargará dinámicamente -->
-            </div>
-            
+            <div class="cartas-juego"></div>
             <div id="resultado"></div>
             
             <div class="botones-juego">
@@ -36,8 +33,8 @@ async function mostrarJuego() {
     try {
         await iniciarNuevoJuego();
     } catch (error) {
-        console.error("Error en el juego:", error);
-        document.getElementById('resultado').innerHTML = `
+        console.error("Error al cargar el juego:", error);
+        document.getElementById("resultado").innerHTML = `
             <div class="error">
                 <p>¡Error al cargar el juego!</p>
                 <button onclick="mostrarJuego()" class="boton-reintentar">Reintentar</button>
@@ -45,6 +42,7 @@ async function mostrarJuego() {
         `;
     }
 }
+
 
 async function iniciarNuevoJuego() {
     const mazo = await barajarMazo();

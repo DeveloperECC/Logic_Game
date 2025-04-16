@@ -534,3 +534,12 @@ h1 {
     justify-content: center;
   }
 }
+.cartas-juego {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.carta-juego-container {
+  width: calc(25% - 10px); /* Para cuatro columnas en pantalla */
+}
