@@ -37,6 +37,6 @@ function crearHtmlCarta(carta) {
 function filtrarPorPalo(palo) {
     const cartas = document.querySelectorAll('.carta');
     cartas.forEach(carta => {
-        carta.style.display = (palo === 'all' || carta.dataset.palo === palo) ? 'block' : 'none';
+        carta.style.display = (palo === 'all' || carta.dataset.palo === palo) ? 'flex' : 'none';
     });
 }
