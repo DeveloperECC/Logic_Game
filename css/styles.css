@@ -22,6 +22,47 @@
     line-height: 1.6;
     padding-bottom: 80px;
   }
+  /* Agrega esto al inicio del archivo CSS */
+body {
+    background-image: url('https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/fondo.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+/* Añade un overlay oscuro para mejor legibilidad */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Ajusta este valor para más/menos oscuridad */
+    z-index: -1;
+}
+
+#app {
+    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco semitransparente */
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustes para el header */
+header {
+    background-color: rgba(42, 117, 187, 0.9); /* Hacer el header semitransparente */
+    backdrop-filter: blur(5px);
+}
+
+/* Ajustes para el menú inferior */
+.menu-inferior {
+    background-color: rgba(51, 51, 51, 0.9); /* Hacer el menú semitransparente */
+    backdrop-filter: blur(5px);
+}
   
   /* ===== HEADER Y BUSCADOR ===== */
   header {
