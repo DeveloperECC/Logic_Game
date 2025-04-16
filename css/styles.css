@@ -1,560 +1,288 @@
-/* ===== RESET Y ESTILOS BASE ===== */
-:root {
-    --color-primary: #FFCB05;   /* Amarillo Pokémon */
-    --color-secondary: #2A75BB; /* Azul Pokémon */
-    --color-accent: #E3350D;    /* Rojo Pokémon */
-    --color-dark: #333;
-    --color-light: #f8f9fa;
-    --color-success: #4CAF50;
-    --color-danger: #dc3545;
-  }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  }
-  
-  body {
-    background-color: var(--color-light);
-    color: var(--color-dark);
-    line-height: 1.6;
-    padding-bottom: 80px;
-  }
-  /* Agrega esto al inicio del archivo CSS */
+/:root {
+  --color-primary: #FFCB05;
+  --color-secondary: #2A75BB;
+  --color-accent: #E3350D;
+  --color-dark: #333;
+  --color-light: #f8f9fa;
+  --color-success: #4CAF50;
+  --color-danger: #dc3545;
+}
+
+/* === ESTILOS GENERALES CON FONDO === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
 body {
-    background-image: url('https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/fondo.png');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url('../img/fondo.png') center/cover no-repeat fixed;
+  color: var(--color-light);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  position: relative;
 }
 
-/* Añade un overlay oscuro para mejor legibilidad */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Ajusta este valor para más/menos oscuridad */
-    z-index: -1;
-}
-
-#app {
-    background-color: rgba(255, 255, 255, 0.85); /* Fondo blanco semitransparente */
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-}
-
-/* Ajustes para el header */
+/* === HEADER === */
 header {
-    background-color: rgba(42, 117, 187, 0.9); /* Hacer el header semitransparente */
-    backdrop-filter: blur(5px);
+  background-color: rgba(42, 117, 187, 0.9);
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
 }
 
-/* Ajustes para el menú inferior */
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* === BUSCADOR === */
+.buscador-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.buscador {
+  flex: 1;
+  position: relative;
+}
+
+#buscador {
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+#filtro {
+  padding: 0 15px;
+  border: none;
+  border-radius: 25px;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tooltip {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: help;
+  background: rgba(0, 0, 0, 0.7);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: var(--color-dark);
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* === CONTENEDOR PRINCIPAL === */
+#app {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 25px;
+  margin: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  min-height: calc(100vh - 180px);
+}
+
+.cargando, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: var(--color-dark);
+}
+
+/* === CARTAS === */
+.contenedor-cartas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 18px;
+  padding: 15px 0;
+}
+
+.carta {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.carta:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.carta img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid #eee;
+}
+
+.boton-favorito {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.boton-favorito:hover {
+  transform: scale(1.2);
+  background: var(--color-accent);
+  color: white;
+}
+
+.favorito-activo {
+  background: #ff4081 !important;
+  color: white !important;
+}
+
+/* === JUEGO EDUCATIVO === */
+.juego-matematico {
+  background: rgba(255, 203, 5, 0.95);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  color: var(--color-dark);
+}
+
+/* ... (Mantén el resto del CSS del juego educativo igual) ... */
+
+/* === MENÚ INFERIOR === */
 .menu-inferior {
-    background-color: rgba(51, 51, 51, 0.9); /* Hacer el menú semitransparente */
-    backdrop-filter: blur(5px);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(51, 51, 51, 0.95);
+  padding: 12px 0;
+  box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  backdrop-filter: blur(5px);
 }
-  
-  /* ===== HEADER Y BUSCADOR ===== */
-  header {
-    background-color: var(--color-secondary);
-    color: white;
-    padding: 15px 20px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  
-  h1 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
 
-  /* Añadir al inicio del CSS */
+.menu-inferior button {
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.menu-inferior button:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
 .nav-icon {
-    width: 30px;
-    height: 30px;
-    object-fit: contain;
-    transition: transform 0.3s;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 5px;
+  object-fit: contain;
+  transition: transform 0.3s;
 }
 
 .menu-inferior button:hover .nav-icon {
-    transform: scale(1.2) rotate(10deg);
+  transform: scale(1.15) rotate(10deg);
 }
 
-/* Mejoras para el juego */
-.juego-matematico {
-    animation: aparecer 0.5s ease-out;
-}
-
-@keyframes aparecer {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.carta-juego-container img {
-    transition: transform 0.3s;
-}
-
-.carta-juego-container:hover img {
-    transform: scale(1.05);
-}
-
-/* Efectos para feedback */
-.correcto {
-    animation: acierto 0.5s;
-}
-
-@keyframes acierto {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-  
-  .buscador-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    gap: 10px;
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 70px;
   }
   
-  .buscador {
-    flex: 1;
-    position: relative;
-  }
-  
-  #buscador {
-    width: 100%;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 20px;
-    font-size: 1rem;
-  }
-  
-  #filtro {
-    padding: 0 15px;
-    border: none;
-    border-radius: 20px;
-    background-color: white;
-    font-weight: bold;
-  }
-  
-  .tooltip {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: help;
-  }
-  
-  .tooltiptext {
-    visibility: hidden;
-    width: 200px;
-    background-color: var(--color-dark);
-    color: white;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
-  
-  /* ===== CONTENEDOR PRINCIPAL ===== */
   #app {
-    padding: 20px;
-    min-height: calc(100vh - 160px);
-  }
-  
-  .cargando, .error {
-    text-align: center;
-    padding: 30px;
-    font-size: 1.2rem;
-  }
-  
-  /* ===== LISTADO DE CARTAS ===== */
-  .contenedor-cartas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-    padding: 20px 0;
-  }
-  
-  .carta {
-    position: relative;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s;
-  }
-  
-  .carta:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  }
-  
-  .carta img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
-  .boton-favorito {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .boton-favorito:hover {
-    transform: scale(1.2);
-    background: var(--color-primary);
-  }
-  
-  /* ===== JUEGO EDUCATIVO ===== */
-  .juego-matematico {
-    background-color: var(--color-primary);
-    padding: 25px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 500px;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .puntaje-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    background: white;
-    padding: 10px 20px;
-    border-radius: 50px;
-  }
-  
-  .puntaje {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--color-accent);
-  }
-  
-  .operacion-actual {
-    background: var(--color-secondary);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-  }
-  
-  .cartas-juego {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin: 25px 0;
-    flex-wrap: wrap;
-  }
-  
-  .carta-juego-container {
-    position: relative;
     margin: 10px;
+    padding: 15px;
   }
   
-  .carta-juego-container img {
-    width: 120px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-  }
-  
-  .valor-carta {
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    padding: 2px 15px;
-    border-radius: 20px;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    font-size: 1.1rem;
-  }
-  
-  .signo-operacion, .signo-igual {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--color-secondary);
-    margin: 0 10px;
-  }
-  
-  .input-respuesta {
-    width: 80px;
-    height: 60px;
-    font-size: 1.8rem;
-    text-align: center;
-    border: 3px solid var(--color-secondary);
-    border-radius: 10px;
-    margin: 0 10px;
-  }
-  
-  .botones-juego {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 25px;
-    flex-wrap: wrap;
-  }
-  
-  .boton-comprobar, .boton-pista {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .boton-comprobar {
-    background: var(--color-accent);
-    color: white;
-  }
-  
-  .boton-pista {
-    background: var(--color-secondary);
-    color: white;
-  }
-  
-  .boton-comprobar:hover, .boton-pista:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-  
-  #resultado {
-    margin-top: 20px;
-    font-size: 1.2rem;
-    min-height: 60px;
-  }
-  
-  .correcto {
-    color: var(--color-success);
-    font-weight: bold;
-  }
-  
-  .incorrecto {
-    color: var(--color-danger);
-  }
-  
-  .pista {
-    color: var(--color-secondary);
-    font-style: italic;
-  }
-  
-  /* ===== PANTALLA DE INFORMACIÓN ===== */
-  .contenedor-informacion {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
-    max-width: 800px;
-    margin: 0 auto;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  }
-  
-  .header-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .logo-api {
-    width: 80px;
-    height: auto;
-  }
-  
-  .card-info {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
-    align-items: center;
-  }
-  
-  .carta-demo {
-    width: 180px;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-  
-  .texto-info {
-    flex: 1;
-  }
-  
-  .datos-personales {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px dashed #ccc;
-  }
-  
-  .version {
-    font-size: 0.9rem;
-    color: #666;
-    text-align: right;
-    margin-top: 10px;
-  }
-  
-  /* ===== MENÚ INFERIOR ===== */
-  .menu-inferior {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    background-color: var(--color-dark);
-    padding: 12px 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    z-index: 1000;
+  .contenedor-cartas {
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .menu-inferior button {
-    background: none;
-    border: none;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .menu-inferior button:hover {
-    transform: translateY(-3px);
+    font-size: 0.75rem;
   }
   
   .nav-icon {
     width: 24px;
     height: 24px;
-    margin-bottom: 5px;
-    object-fit: contain;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
   }
   
-  /* ===== FAVORITOS ===== */
-  .contenedor-favoritos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-    padding: 20px 0;
+  .buscador-container {
+    flex-direction: column;
   }
   
-  .carta-favorito {
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: 10px;
-    padding: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  #buscador, #filtro {
+    width: 100%;
   }
-  
-  .carta-favorito img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    margin-right: 15px;
-    border-radius: 5px;
-  }
-  
-  .info-favorito {
-    flex: 1;
-  }
-  
-  .info-favorito small {
-    color: #666;
-    font-size: 0.8rem;
-  }
-  
-  .btn-eliminar {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-  }
-  
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 768px) {
-    .buscador-container {
-      flex-direction: column;
-    }
-    
-    .contenedor-cartas {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .card-info {
-      flex-direction: column;
-    }
-    
-    .carta-demo {
-      width: 100%;
-      max-width: 200px;
-      margin-bottom: 15px;
-    }
-    
-    .cartas-juego {
-      flex-direction: column;
-    }
-    
-    .input-respuesta {
-      width: 60px;
-      height: 50px;
-      font-size: 1.5rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .menu-inferior button {
-      font-size: 0.7rem;
-    }
-    
-    .nav-icon {
-      width: 20px;
-      height: 20px;
-    }
-  }
+}
