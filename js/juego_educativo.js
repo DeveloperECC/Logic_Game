@@ -1,6 +1,7 @@
 let puntuacionActual = 0;
 let operacionActual = '';
 let resultadoCorrecto = 0;
+let valores = []; 
 
 async function mostrarJuego() {
     const app = document.getElementById("app");
@@ -34,7 +35,7 @@ async function iniciarNuevoJuego() {
         throw new Error("No se pudieron obtener suficientes cartas");
     }
 
-    const valores = cartas.map(carta => {
+    valores = cartas.map(carta => {
         let valor;
         switch(carta.value.toLowerCase()) {
             case 'ace': case 'as': valor = 1; break;
@@ -87,13 +88,15 @@ async function iniciarNuevoJuego() {
             
             <div class="botones-juego">
                 <button class="boton-comprobar" onclick="comprobarRespuesta()">
-                    <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/comprobar.png" 
-                         alt="Comprobar" class="icono-boton">
+                    <img src="img/iconos/comprobar.png" 
+                         alt="Comprobar" class="icono-boton"
+                         onerror="this.src='https://via.placeholder.com/30x30?text=✓'">
                     Comprobar
                 </button>
                 <button class="boton-pista" onclick="mostrarPista()">
-                    <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/pista.png" 
-                         alt="Pista" class="icono-boton">
+                    <img src="img/iconos/pista.png" 
+                         alt="Pista" class="icono-boton"
+                         onerror="this.src='https://via.placeholder.com/30x30?text=?'">
                     Pista
                 </button>
             </div>
@@ -120,8 +123,10 @@ function comprobarRespuesta() {
     if (respuestaUsuario === resultadoCorrecto) {
         puntuacionActual += 10;
         resultadoDiv.innerHTML = `
-            <p class="correcto">¡Correcto! 🎉 +10 puntos</p>
-            <p>${operacionActual.texto.toUpperCase()} ${resultadoCorrecto}</p>
+            <div class="feedback-correcto">
+                <p class="correcto">¡Correcto! 🎉 +10 puntos</p>
+                <p class="explicacion">${operacionActual.texto.toUpperCase()} ${resultadoCorrecto}</p>
+            </div>
         `;
         
         // Recargar automáticamente después de 2 segundos
@@ -130,8 +135,10 @@ function comprobarRespuesta() {
         }, 2000);
     } else {
         resultadoDiv.innerHTML = `
-            <p class="incorrecto">¡Ups! Intenta otra vez</p>
-            <p>Pista: El resultado es ${respuestaUsuario < resultadoCorrecto ? 'mayor' : 'menor'}</p>
+            <div class="feedback-incorrecto">
+                <p class="incorrecto">¡Ups! Intenta otra vez</p>
+                <p class="pista-simple">El resultado es ${respuestaUsuario < resultadoCorrecto ? 'mayor' : 'menor'}</p>
+            </div>
         `;
     }
 }
@@ -142,12 +149,21 @@ function mostrarPista() {
     // Pistas más concretas y educativas
     let pista = "";
     if (operacionActual.simbolo === '+') {
-        pista = `Suma los dos números: ${valores[0].valor} + ${valores[1].valor}`;
+        pista = `Suma los dos números: ${valores[0].valor} + ${valores[1].valor} = ${resultadoCorrecto}`;
     } else if (operacionActual.simbolo === '-') {
-        pista = `Resta: ${valores[0].valor} - ${valores[1].valor}`;
+        pista = `Resta: ${valores[0].valor} - ${valores[1].valor} = ${resultadoCorrecto}`;
     } else {
-        pista = `Multiplica: ${valores[0].valor} × ${valores[1].valor}`;
+        pista = `Multiplica: ${valores[0].valor} × ${valores[1].valor} = ${resultadoCorrecto}`;
     }
     
-    resultadoDiv.innerHTML = `<p class="pista">💡 ${pista}</p>`;
+    resultadoDiv.innerHTML = `
+        <div class="pista-detallada">
+            <p>💡 ${pista}</p>
+            <button onclick="ocultarPista()" class="boton-ocultar">Ocultar</button>
+        </div>
+    `;
+}
+
+function ocultarPista() {
+    document.getElementById('resultado').innerHTML = '';
 }

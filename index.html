@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logic Cards - Juego Educativo</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Preload de imágenes para mejor performance -->
-    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/inicio.png" as="image">
-    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/juego.png" as="image">
-    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/favoritos.png" as="image">
-    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/info.png" as="image">
+    <!-- Preload de imágenes corregidas -->
+    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/inicio.png" as="image">
+    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/juego.png" as="image">
+    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/favoritos.png" as="image">
+    <link rel="preload" href="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/info.png" as="image">
+    <link rel="preload" href="img/fondo.png" as="image">
 </head>
 <body>
     <header>
@@ -35,19 +36,23 @@
 
     <nav class="menu-inferior">
         <button onclick="mostrarInicio()">
-            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/inicio.png" alt="Inicio" class="nav-icon">
+            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/inicio.png" alt="Inicio" class="nav-icon" 
+                 onerror="this.src='img/iconos/inicio.png'">
             <span>Inicio</span>
         </button>
         <button onclick="mostrarJuego()">
-            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/juego.png" alt="Juego" class="nav-icon">
+            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/juego.png" alt="Juego" class="nav-icon"
+                 onerror="this.src='img/iconos/juego.png'">
             <span>Juego</span>
         </button>
         <button onclick="mostrarFavoritos()">
-            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/favoritos.png" alt="Favoritos" class="nav-icon">
+            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/favoritos.png" alt="Favoritos" class="nav-icon"
+                 onerror="this.src='img/iconos/favoritos.png'">
             <span>Favoritos</span>
         </button>
         <button onclick="mostrarInformacion()">
-            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/img/iconos/info.png" alt="Información" class="nav-icon">
+            <img src="https://raw.githubusercontent.com/DeveloperECC/Logic_Game/main/img/iconos/info.png" alt="Información" class="nav-icon"
+                 onerror="this.src='img/iconos/info.png'">
             <span>Info</span>
         </button>
     </nav>
