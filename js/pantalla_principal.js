@@ -21,6 +21,12 @@ async function mostrarInicio() {
         `;
     } catch (error) {
         app.innerHTML = '<div class="error">Error al cargar las cartas</div>';
+    } finally {
+        // Asegurarnos de que el mensaje de carga se elimine
+        const cargandoElement = app.querySelector('.cargando');
+        if (cargandoElement) {
+            cargandoElement.remove();
+        }
     }
 }
 

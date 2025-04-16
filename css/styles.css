@@ -299,7 +299,7 @@ h1 {
 .contenedor-informacion {
   background: 
     linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.1)),
-    url('../img/info.png') center/cover;
+    url('../img/fondos/fondo-info.jpg') center/cover;
   border-radius: 20px;
   padding: 30px;
   max-width: 900px;
