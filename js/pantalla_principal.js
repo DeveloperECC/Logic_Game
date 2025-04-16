@@ -1,78 +1,66 @@
-let mazosDisponibles = [
-  { nombre: "Todos los Mazos", id: "new" },
-  { nombre: "♠ Picas", id: "spades" },
-  { nombre: "♥ Corazones", id: "hearts" },
-  { nombre: "♦ Diamantes", id: "diamonds" },
-  { nombre: "♣ Tréboles", id: "clubs" }
-];
-
-let mazoActual = "new";
+let todasLasCartas = [];
 
 async function mostrarInicio() {
   const app = document.getElementById('app');
   app.innerHTML = `
-    <h1 style="color:#FF6B6B;">🎴 Mazos Mágicos</h1>
-    <p>¡Elige un mazo y comienza a aprender!</p>
+    <h1 class="titulo-principal">🎴 Mazos de Cartas</h1>
+    <p class="subtitulo">Explora todos nuestros mazos disponibles</p>
     
-    <div style="display:flex;gap:10px;margin-bottom:20px;">
-      <select id="selector-mazo" style="padding:10px;border-radius:10px;flex-grow:1;">
-        ${mazosDisponibles.map(mazo => `
-          <option value="${mazo.id}">${mazo.nombre}</option>
-        `).join('')}
+    <div class="buscador-container">
+      <input type="text" id="buscador" placeholder="🔍 Buscar cartas por valor (ej: ace, king, 5) o palo (hearts, spades)...">
+      <select id="filtro-palo">
+        <option value="all">Todos los palos</option>
+        <option value="HEARTS">♥ Corazones</option>
+        <option value="DIAMONDS">♦ Diamantes</option>
+        <option value="CLUBS">♣ Tréboles</option>
+        <option value="SPADES">♠ Picas</option>
       </select>
-      <button onclick="cargarMazoSeleccionado()" style="background-color:#4ECDC4;">🔍 Cargar</button>
     </div>
     
-    <input type="text" id="buscador" placeholder="🔎 Buscar cartas por nombre o valor..." 
-           style="padding:12px;width:100%;border-radius:20px;border:2px solid #4ECDC4;">
-    
-    <div id="card-container" class="card-container" style="margin-top:20px;"></div>
+    <div id="loading">Cargando cartas mágicas...</div>
+    <div id="card-container" class="card-container"></div>
   `;
-  
-  document.getElementById('selector-mazo').addEventListener('change', function() {
-    mazoActual = this.value;
-  });
-  
-  document.getElementById('buscador').addEventListener('input', function(e) {
-    filtrarCartas(e);
-  });
-  
-  await cargarCartas();
-}
 
-async function cargarMazoSeleccionado() {
-  await cargarCartas();
-}
+  document.getElementById('buscador').addEventListener('input', filtrarCartas);
+  document.getElementById('filtro-palo').addEventListener('change', filtrarCartas);
 
-async function cargarCartas() {
-  const container = document.getElementById('card-container');
-  container.innerHTML = '<p>Cargando cartas mágicas...</p>';
-  
   try {
-    let cartasAPI;
-    if (mazoActual === "new") {
-      const mazo = await barajarMazo();
-      cartasAPI = await sacarCartas(mazo.deck_id, 20);
-    } else {
-      cartasAPI = await obtenerCartasPorPalo(mazoActual, 20);
-    }
-    
-    mazoDeCartas = cartasAPI;
-    mostrarCartasEnContainer(mazoDeCartas, container);
+    document.getElementById('loading').style.display = 'block';
+    todasLasCartas = await obtenerMazoCompleto();
+    mostrarCartas(todasLasCartas);
+    document.getElementById('loading').style.display = 'none';
   } catch (error) {
-    container.innerHTML = '<p>¡Las cartas mágicas se escondieron! Intenta de nuevo.</p>';
+    document.getElementById('loading').innerHTML = 
+      '<p class="error">Error cargando cartas. Intenta recargar la página.</p>';
     console.error(error);
   }
 }
 
-// Agrega esta función a conexion_api.js
-async function obtenerCartasPorPalo(palo, cantidad) {
-  try {
-    const respuesta = await fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${cantidad}&suits=${palo}`);
-    const datos = await respuesta.json();
-    return datos.cards;
-  } catch (error) {
-    console.error('Error al obtener cartas por palo:', error);
-    throw error;
-  }
+function mostrarCartas(cartas) {
+  const container = document.getElementById('card-container');
+  container.innerHTML = cartas.map(carta => `
+    <div class="card" data-palo="${carta.suit}" data-valor="${carta.value}">
+      <img src="${carta.image}" alt="${carta.value} of ${carta.suit}" 
+           onerror="this.src='img/carta-error.png'">
+      <button onclick="agregarAFavoritos('${carta.code}')">
+        <img src="img/iconos/favorito.png" alt="Favorito">
+      </button>
+    </div>
+  `).join('');
 }
+
+function filtrarCartas() {
+  const texto = document.getElementById('buscador').value.toLowerCase();
+  const palo = document.getElementById('filtro-palo').value;
+  
+  const filtradas = todasLasCartas.filter(carta => {
+    const coincideTexto = carta.value.toLowerCase().includes(texto) || 
+                         carta.suit.toLowerCase().includes(texto);
+    const coincidePalo = palo === 'all' || carta.suit === palo;
+    return coincideTexto && coincidePalo;
+  });
+  
+  mostrarCartas(filtradas);
+}
+
+window.mostrarInicio = mostrarInicio;

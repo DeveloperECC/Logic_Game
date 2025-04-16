@@ -1,117 +1,115 @@
-let puntuacionActual = 0;
-let operacionActual = {};
-let resultadoCorrecto = 0;
-let valores = [];
-let mazoId = null;
+let mazoJuegoId = null;
+let puntuacion = 0;
 
-
-// Agrega al inicio del archivo
-let efectosSonido = {
-    correcto: new Audio('sfx/correcto.mp3'),
-    incorrecto: new Audio('sfx/incorrecto.mp3'),
-    victoria: new Audio('sfx/victoria.mp3')
-  };
-  
-  async function iniciarNuevoJuego() {
-    const app = document.getElementById('app');
-    app.innerHTML = `
-      <div class="juego-matematico">
-        <div class="puntaje-container" style="background-color:#FFD166;padding:10px;border-radius:10px;">
-          <span class="puntaje">⭐ Puntos: ${puntuacionActual}</span>
-        </div>
-        
-        <div style="display:flex;justify-content:center;align-items:center;margin:30px 0;">
-          <div class="carta-juego">
-            <div class="valor-carta" id="valor1">?</div>
-            <img src="img/carta-fondo.png" style="width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;opacity:0.3;">
-          </div>
-          
-          <div class="operacion-actual">+</div>
-          
-          <div class="carta-juego">
-            <div class="valor-carta" id="valor2">?</div>
-            <img src="img/carta-fondo.png" style="width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;opacity:0.3;">
-          </div>
-          
-          <div class="igual" style="font-size:3rem;margin:0 15px;">=</div>
-          
-          <input id="respuesta" type="number" style="font-size:2rem;width:100px;text-align:center;" autofocus>
-        </div>
-        
-        <div id="resultado" style="min-height:50px;font-size:1.2rem;"></div>
-        
-        <div class="botones-juego" style="display:flex;justify-content:center;gap:20px;">
-          <button onclick="comprobarRespuesta()" style="background-color:#4ECDC4;">✅ Comprobar</button>
-          <button onclick="mostrarPista()" style="background-color:#FFD166;">💡 Pista</button>
-        </div>
+async function iniciarJuego() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="juego-container">
+      <div class="puntaje">Puntos: <span>${puntuacion}</span></div>
+      
+      <div class="cartas-juego">
+        <div class="carta-juego" id="carta1"></div>
+        <div class="operacion">+</div>
+        <div class="carta-juego" id="carta2"></div>
+        <div class="igual">=</div>
+        <input type="number" id="respuesta" placeholder="?">
       </div>
+      
+      <div id="feedback"></div>
+      
+      <div class="controles-juego">
+        <button id="comprobar">Comprobar</button>
+        <button id="nueva-carta">Nuevo Juego</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('comprobar').addEventListener('click', comprobarRespuesta);
+  document.getElementById('nueva-carta').addEventListener('click', nuevaRonda);
+  document.getElementById('respuesta').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') comprobarRespuesta();
+  });
+
+  await nuevaRonda();
+}
+
+async function nuevaRonda() {
+  try {
+    if (!mazoJuegoId) {
+      const mazo = await barajarMazo();
+      mazoJuegoId = mazo.deck_id;
+    }
+    
+    const cartas = await sacarCartas(mazoJuegoId, 2);
+    const [carta1, carta2] = cartas;
+    
+    const valor1 = obtenerValorNumerico(carta1.value);
+    const valor2 = obtenerValorNumerico(carta2.value);
+    
+    const operaciones = [
+      { simbolo: '+', calcular: (a, b) => a + b, nombre: 'suma' },
+      { simbolo: '-', calcular: (a, b) => a - b, nombre: 'resta' },
+      { simbolo: '×', calcular: (a, b) => a * b, nombre: 'multiplicación' }
+    ];
+    
+    const operacion = operaciones[Math.floor(Math.random() * operaciones.length)];
+    const resultado = operacion.calcular(valor1, valor2);
+    
+    // Mostrar cartas
+    document.getElementById('carta1').innerHTML = `
+      <img src="${carta1.image}" alt="${carta1.value}">
+      <div class="valor">${valor1}</div>
     `;
-  
-    try {
-      if (!mazoId) {
-        const mazo = await barajarMazo();
-        mazoId = mazo.deck_id;
-      }
-      
-      const cartasAPI = await sacarCartas(mazoId, 2);
-      valores = cartasAPI.map(c => {
-        let val = isNaN(c.value) ? ({'ACE':1,'JACK':11,'QUEEN':12,'KING':13}[c.value]||0) : parseInt(c.value);
-        return { valor: val, image: c.image, suit: c.suit, code: c.code };
-      });
-      
-      const ops = [
-        { simbolo: '+', fn: (a,b)=>a+b, texto:'suma', color: '#4ECDC4' },
-        { simbolo: '-', fn: (a,b)=>a-b, texto:'resta', color: '#FF6B6B' },
-        { simbolo: '×', fn: (a,b)=>a*b, texto:'multiplicación', color: '#FFD166' }
-      ];
-      
-      operacionActual = ops[Math.floor(Math.random()*ops.length)];
-      resultadoCorrecto = operacionActual.fn(valores[0].valor, valores[1].valor);
-  
-      document.getElementById('valor1').textContent = valores[0].valor;
-      document.getElementById('valor2').textContent = valores[1].valor;
-      document.querySelector('.operacion-actual').textContent = operacionActual.simbolo;
-      document.querySelector('.operacion-actual').style.color = operacionActual.color;
-      
-      document.getElementById('respuesta').addEventListener('keypress', e => {
-        if (e.key === 'Enter') comprobarRespuesta();
-      });
-    } catch (error) {
-      document.getElementById("resultado").innerHTML = `<p style="color:red;">¡Oh no! Las cartas mágicas se escaparon. Intenta de nuevo.</p>`;
-      console.error(error);
-    }
-  }
-  
-  function comprobarRespuesta() {
-    const respuestaInput = document.getElementById('respuesta');
-    const resp = parseInt(respuestaInput.value);
-    const resDiv = document.getElementById('resultado');
     
-    if (isNaN(resp)) {
-      resDiv.innerHTML = `<p>🧙‍♂️ ¡Necesitamos un número mágico!</p>`;
-      return;
-    }
+    document.getElementById('carta2').innerHTML = `
+      <img src="${carta2.image}" alt="${carta2.value}">
+      <div class="valor">${valor2}</div>
+    `;
     
-    if (resp === resultadoCorrecto) {
-      efectosSonido.correcto.play();
-      puntuacionActual += 10;
-      resDiv.innerHTML = `<p style="color:green;">🎉 ¡Correcto! +10 puntos mágicos</p>`;
-      
-      // Efecto de confeti
-      if (puntuacionActual % 50 === 0) {
-        efectosSonido.victoria.play();
-        resDiv.innerHTML += `<p style="color:gold;font-weight:bold;">✨ ¡Racha mágica! ${puntuacionActual} puntos</p>`;
-      }
-      
-      setTimeout(iniciarNuevoJuego, 1500);
-    } else {
-      efectosSonido.incorrecto.play();
-      resDiv.innerHTML = `<p style="color:red;">🤔 ¡Ups! El número mágico es ${resp < resultadoCorrecto ? 'mayor' : 'menor'}</p>`;
-      respuestaInput.focus();
-    }
+    document.querySelector('.operacion').textContent = operacion.simbolo;
+    document.getElementById('respuesta').value = '';
+    document.getElementById('respuesta').focus();
+    
+    // Guardar estado actual
+    window.juegoActual = { valor1, valor2, operacion, resultado };
+    
+  } catch (error) {
+    document.getElementById('feedback').innerHTML = `
+      <p class="error">Error al cargar cartas. Intenta de nuevo.</p>
+    `;
+    console.error(error);
+  }
+}
+
+function obtenerValorNumerico(valorCarta) {
+  const valores = {
+    'ACE': 1, 'JACK': 11, 'QUEEN': 12, 'KING': 13
+  };
+  return valores[valorCarta] || parseInt(valorCarta);
+}
+
+function comprobarRespuesta() {
+  const respuesta = parseInt(document.getElementById('respuesta').value);
+  const { resultado } = window.juegoActual;
+  const feedback = document.getElementById('feedback');
+  
+  if (isNaN(respuesta)) {
+    feedback.innerHTML = '<p>Por favor ingresa un número válido</p>';
+    return;
   }
   
-  function mostrarPista() {
-    document.getElementById('resultado').innerHTML =
-      `<p>💡 ${operacionActual.texto}: ${valores[0].valor} ${operacionActual.simbolo} ${valores[1].valor} = ${resultadoCorrecto}</p>`;
+  if (respuesta === resultado) {
+    puntuacion += 10;
+    feedback.innerHTML = '<p class="correcto">¡Correcto! +10 puntos</p>';
+    setTimeout(nuevaRonda, 1500);
+  } else {
+    feedback.innerHTML = `
+      <p class="incorrecto">Incorrecto. El resultado es 
+      ${respuesta < resultado ? 'mayor' : 'menor'}</p>
+    `;
   }
+  
+  document.querySelector('.puntaje span').textContent = puntuacion;
+}
+
+window.iniciarJuego = iniciarJuego;

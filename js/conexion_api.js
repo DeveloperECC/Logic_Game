@@ -1,51 +1,41 @@
-// conexion_api.js
+// Versión mejorada con manejo de errores
+const API_BASE = 'https://deckofcardsapi.com/api/deck';
 
-/**
- * Baraja un nuevo mazo de cartas.
- * @returns {Promise<Object>} Objeto con información del mazo, incluyendo deck_id.
- */
 async function barajarMazo() {
-    try {
-      const respuesta = await fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1');
-      const datos = await respuesta.json();
-      return datos; // Contiene deck_id, remaining, success...
-    } catch (error) {
-      console.error('Error al barajar el mazo:', error);
-      throw error;
-    }
+  try {
+    const response = await fetch(`${API_BASE}/new/shuffle/?deck_count=1`);
+    if (!response.ok) throw new Error('Error al barajar');
+    return await response.json();
+  } catch (error) {
+    console.error('Error barajando mazo:', error);
+    throw error;
   }
-  
-  /**
-   * Saca una cantidad específica de cartas desde un mazo.
-   * @param {string} deck_id - ID del mazo.
-   * @param {number} cantidad - Número de cartas a sacar.
-   * @returns {Promise<Array>} Array de cartas obtenidas.
-   */
-  async function sacarCartas(deck_id, cantidad) {
-    try {
-      const respuesta = await fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=${cantidad}`);
-      const datos = await respuesta.json();
-      return datos.cards; // Array de cartas
-    } catch (error) {
-      console.error('Error al sacar cartas del mazo:', error);
-      throw error;
-    }
+}
+
+async function sacarCartas(deckId, count) {
+  try {
+    const response = await fetch(`${API_BASE}/${deckId}/draw/?count=${count}`);
+    if (!response.ok) throw new Error('Error al sacar cartas');
+    const data = await response.json();
+    return data.cards;
+  } catch (error) {
+    console.error('Error sacando cartas:', error);
+    throw error;
   }
-  
-  /**
-   * Obtiene una carta específica por su código.
-   * @param {string} codigo - Código de la carta (por ejemplo, "AS" para As de Espadas).
-   * @returns {Promise<Object>} Objeto de la carta obtenida.
-   */
-  async function obtenerCartaPorCodigo(codigo) {
-    try {
-      const respuesta = await fetch(`https://deckofcardsapi.com/api/deck/new/draw/?cards=${codigo}`);
-      const datos = await respuesta.json();
-      return datos.cards[0]; // Una sola carta
-    } catch (error) {
-      console.error('Error al obtener la carta por código:', error);
-      throw error;
-    }
+}
+
+async function obtenerMazoCompleto() {
+  try {
+    const response = await fetch(`${API_BASE}/new/draw/?count=52`);
+    if (!response.ok) throw new Error('Error al obtener mazo completo');
+    const data = await response.json();
+    return data.cards;
+  } catch (error) {
+    console.error('Error obteniendo mazo completo:', error);
+    throw error;
   }
-  
-  
+}
+
+window.barajarMazo = barajarMazo;
+window.sacarCartas = sacarCartas;
+window.obtenerMazoCompleto = obtenerMazoCompleto;
