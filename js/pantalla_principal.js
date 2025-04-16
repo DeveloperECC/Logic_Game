@@ -4,7 +4,7 @@ async function mostrarInicio() {
     
     try {
         const mazo = await barajarMazo();
-        const cartas = await sacarCartas(mazo.deck_id, 52); // Sacar todo el mazo
+        const cartas = await sacarCartas(mazo.deck_id, 52);
         
         app.innerHTML = `
             <h2>Mazo Completo</h2>
@@ -20,29 +20,40 @@ async function mostrarInicio() {
             </div>
         `;
     } catch (error) {
-        app.innerHTML = '<div class="error">Error al cargar las cartas</div>';
-    } finally {
-        // Asegurarnos de que el mensaje de carga se elimine
-        const cargandoElement = app.querySelector('.cargando');
-        if (cargandoElement) {
-            cargandoElement.remove();
-        }
+        console.error("Error al cargar cartas:", error);
+        app.innerHTML = '<div class="error">Error al cargar las cartas. Intenta recargar la página.</div>';
     }
 }
 
 function crearHtmlCarta(carta) {
     return `
-        <div class="carta" data-palo="${carta.suit.toLowerCase()}">
+        <div class="carta" data-palo="${carta.suit.toLowerCase()}" onclick="mostrarDetalleCarta('${carta.code}')">
             <img src="${carta.image}" alt="${carta.value} de ${carta.suit}" 
                  onerror="this.src='img/carta-error.png'">
-            <button class="boton-favorito" onclick="agregarFavorito('${carta.code}')">★</button>
+            <button class="boton-favorito" onclick="event.stopPropagation(); agregarFavorito('${carta.code}')">★</button>
+            <button class="boton-api" onclick="event.stopPropagation(); abrirApiCarta('${carta.code}')">Ver API</button>
         </div>
     `;
+}
+
+function abrirApiCarta(codigoCarta) {
+    window.open(`https://deckofcardsapi.com/api/deck/new/draw/?cards=${codigoCarta}`, '_blank');
 }
 
 function filtrarPorPalo(palo) {
     const cartas = document.querySelectorAll('.carta');
     cartas.forEach(carta => {
-        carta.style.display = (palo === 'all' || carta.dataset.palo === palo) ? 'flex' : 'none';
+        carta.style.display = (palo === 'all' || carta.dataset.palo === palo) ? 'block' : 'none';
     });
+    function crearHtmlCarta(carta) {
+        const esFav = favoritos.includes(carta.code);
+        return `
+            <div class="carta" data-palo="${carta.suit.toLowerCase()}">
+                <img src="${carta.image}" alt="${carta.value} de ${carta.suit}">
+                <button class="fav-btn" onclick="agregarFavorito('${carta.code}', event)">
+                    ${esFav ? '❤️' : '★'}
+                </button>
+            </div>
+        `;
+    }
 }
