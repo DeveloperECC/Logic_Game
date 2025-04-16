@@ -1,72 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logic Cards - Juego Educativo</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- Preload de imágenes -->
-    <link rel="preload" href="img/iconos/inicio.png" as="image">
-    <link rel="preload" href="img/iconos/juego.png" as="image">
-    <link rel="preload" href="img/iconos/favoritos.png" as="image">
-    <link rel="preload" href="img/iconos/info.png" as="image">
-    <link rel="preload" href="img/fondo.png" as="image">
-    <link rel="preload" href="img/info.png" as="image">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logic Game - Cartas Educativas</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/png" href="img/iconos/info.png"/>
 </head>
 <body>
-    <header>
-        <h1>Logic Cards</h1>
-        <div class="buscador-container">
-            <div class="buscador">
-                <input type="text" id="buscador" placeholder="Ej: 'As', 'Reina', 'Corazones'...">
-                <div class="tooltip">ℹ️
-                    <span class="tooltiptext">Busca por valor (2-10, J, Q, K, A) o palo (corazones, diamantes, tréboles, picas)</span>
-                </div>
-            </div>
-            <select id="filtro">
-                <option value="all">Todos</option>
-                <option value="hearts">♥ Corazones</option>
-                <option value="diamonds">♦ Diamantes</option>
-                <option value="clubs">♣ Tréboles</option>
-                <option value="spades">♠ Picas</option>
-            </select>
-        </div>
-    </header>
+  <div id="pantalla-bienvenida">
+    <img src="img/fondo.png" alt="Bienvenida" class="fondo-inicial"/>
+    <h1>¡Bienvenido a Logic Game!</h1>
+    <p>Aprende lógica y matemáticas con cartas mágicas</p>
+    <button id="btn-empezar">¡Empezar!</button>
+  </div>
 
-    <main id="app"><!-- Contenido dinámico --></main>
+  <main id="app"></main>
 
-    <nav class="menu-inferior">
-        <button onclick="mostrarInicio()">
-            <img src="img/iconos/inicio.png" alt="Inicio" class="nav-icon">
-            <span>Inicio</span>
-        </button>
-        <button onclick="mostrarJuego()">
-            <img src="img/iconos/juego.png" alt="Juego" class="nav-icon">
-            <span>Juego</span>
-        </button>
-        <button onclick="mostrarFavoritos()">
-            <img src="img/iconos/favoritos.png" alt="Favoritos" class="nav-icon">
-            <span>Favoritos</span>
-        </button>
-        <button onclick="mostrarInformacion()">
-            <img src="img/iconos/info.png" alt="Información" class="nav-icon">
-            <span>Info</span>
-        </button>
-    </nav>
+  <nav class="menu-inferior">
+    <button onclick="pantallaPrincipal()">Inicio</button>
+    <button onclick="mostrarJuego()">Juego</button>
+    <button onclick="mostrarFavoritos()">Favoritos</button>
+    <button onclick="mostrarInformacion()">Info</button>
+  </nav>
 
-    <!-- Scripts -->
-    <script src="js/conexion_api.js"></script>
-    <script src="js/buscador.js"></script>
-    <script src="js/favoritos.js"></script>
-    <script src="js/juego_educativo.js"></script>
-    <script src="js/pantalla_principal.js"></script>
-    <script src="js/informacion.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            iniciarBuscador();
-            mostrarInicio();
-        });
-    </script>
+  <script src="js/conexion_api.js"></script>
+  <script src="js/pantalla_principal.js"></script>
+  <script src="js/juego.js"></script>
+  <script src="js/favoritos.js"></script>
+  <script src="js/informacion.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

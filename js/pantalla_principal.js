@@ -1,59 +1,58 @@
-async function mostrarInicio() {
-    const app = document.getElementById("app");
-    app.innerHTML = '<div class="cargando">Cargando cartas...</div>';
-    
-    try {
-        const mazo = await barajarMazo();
-        const cartas = await sacarCartas(mazo.deck_id, 52);
-        
-        app.innerHTML = `
-            <h2>Mazo Completo</h2>
-            <div class="filtros">
-                <button onclick="filtrarPorPalo('all')">Todas</button>
-                <button onclick="filtrarPorPalo('hearts')">♥ Corazones</button>
-                <button onclick="filtrarPorPalo('diamonds')">♦ Diamantes</button>
-                <button onclick="filtrarPorPalo('clubs')">♣ Tréboles</button>
-                <button onclick="filtrarPorPalo('spades')">♠ Picas</button>
-            </div>
-            <div class="contenedor-cartas" id="contenedor-cartas">
-                ${cartas.map(carta => crearHtmlCarta(carta)).join('')}
-            </div>
-        `;
-    } catch (error) {
-        console.error("Error al cargar cartas:", error);
-        app.innerHTML = '<div class="error">Error al cargar las cartas. Intenta recargar la página.</div>';
-    }
+/let mazoDeCartas = [];
+
+function mostrarInicio() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <h1>Bienvenido al Juego Educativo de Cartas</h1>
+    <p>¡Aprende jugando con cartas y diviértete!</p>
+    <input type="text" id="buscador" placeholder="Buscar por palo, valor...">
+    <div id="card-container"></div>
+  `;
+  cargarCartas();
 }
 
-function crearHtmlCarta(carta) {
+async function cargarCartas() {
+  const app = document.getElementById('card-container');
+  const cartas = await obtenerCartas();
+  mazoDeCartas = cartas.cards;
+
+  app.innerHTML = mazoDeCartas.map(carta => {
     return `
-        <div class="carta" data-palo="${carta.suit.toLowerCase()}" onclick="mostrarDetalleCarta('${carta.code}')">
-            <img src="${carta.image}" alt="${carta.value} de ${carta.suit}" 
-                 onerror="this.src='img/carta-error.png'">
-            <button class="boton-favorito" onclick="event.stopPropagation(); agregarFavorito('${carta.code}')">★</button>
-            <button class="boton-api" onclick="event.stopPropagation(); abrirApiCarta('${carta.code}')">Ver API</button>
-        </div>
+      <div class="card" data-palo="${carta.suit}" data-valor="${carta.value}">
+        <img src="${carta.image}" alt="${carta.code}">
+        <button onclick="agregarAFavoritos('${carta.code}')">Favorito</button>
+      </div>
     `;
+  }).join('');
+
+  // Evento para filtro de búsqueda
+  const buscador = document.getElementById('buscador');
+  buscador.addEventListener('input', filtrarCartas);
 }
 
-function abrirApiCarta(codigoCarta) {
-    window.open(`https://deckofcardsapi.com/api/deck/new/draw/?cards=${codigoCarta}`, '_blank');
+function filtrarCartas(event) {
+  const textoFiltro = event.target.value.toLowerCase();
+  const cartasFiltradas = mazoDeCartas.filter(carta => {
+    return carta.suit.toLowerCase().includes(textoFiltro) || carta.value.toLowerCase().includes(textoFiltro);
+  });
+
+  const app = document.getElementById('card-container');
+  app.innerHTML = cartasFiltradas.map(carta => {
+    return `
+      <div class="card" data-palo="${carta.suit}" data-valor="${carta.value}">
+        <img src="${carta.image}" alt="${carta.code}">
+        <button onclick="agregarAFavoritos('${carta.code}')">Favorito</button>
+      </div>
+    `;
+  }).join('');
 }
 
-function filtrarPorPalo(palo) {
-    const cartas = document.querySelectorAll('.carta');
-    cartas.forEach(carta => {
-        carta.style.display = (palo === 'all' || carta.dataset.palo === palo) ? 'block' : 'none';
-    });
-    function crearHtmlCarta(carta) {
-        const esFav = favoritos.includes(carta.code);
-        return `
-            <div class="carta" data-palo="${carta.suit.toLowerCase()}">
-                <img src="${carta.image}" alt="${carta.value} de ${carta.suit}">
-                <button class="fav-btn" onclick="agregarFavorito('${carta.code}', event)">
-                    ${esFav ? '❤️' : '★'}
-                </button>
-            </div>
-        `;
-    }
+function agregarAFavoritos(codigoCarta) {
+  let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+  
+  if (!favoritos.includes(codigoCarta)) {
+    favoritos.push(codigoCarta);
+    localStorage.setItem('favoritos', JSON.stringify(favoritos));
+    alert('Carta añadida a favoritos');
+  }
 }
