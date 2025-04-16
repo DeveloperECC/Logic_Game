@@ -14,7 +14,7 @@ function mostrarInformacion() {
             <div class="header-info">
                 <img src="img/logo-api.png" alt="Logo API" class="logo-api" 
                      onerror="this.src='https://deckofcardsapi.com/static/img/logo.png'">
-                <h1>Magic Card Learning</h1>
+                <h1>Aprende con cartas mágicas</h1>
             </div>
             
             <div class="card-info">
