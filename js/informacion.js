@@ -1,43 +1,59 @@
 function mostrarInformacion() {
     const app = document.getElementById("app");
     
-    // Datos personalizables (cada estudiante modifica estos valores)
     const studentData = {
-        nombre: "Tu Nombre Completo",
-        github: "tuUsuarioGitHub",
-        descripcion: "Esta app utiliza la API Deck of Cards para crear juegos educativos con cartas.",
-        version: "V.1.0.0"
+        nombre: "Elmer Cabrera Cortez",
+        github: "DeveloperECC",
+        descripcion: "¡Aprende matemáticas y lógica jugando con cartas! Esta app combina la magia de los naipes con educación interactiva para todas las edades.",
+        version: "V.1.0.0",
+        apiDescripcion: "La API Deck of Cards nos proporciona mazos virtuales, cartas aleatorias y funcionalidades para crear experiencias educativas únicas."
     };
-
-    // URL del logo de la API (¡Nueva línea agregada!)
-    const logoAPI = "https://deckofcardsapi.com/static/img/logo.png";
-    
-    // URL de imagen de carta de ejemplo (también puedes añadir esto)
-    const cartaEjemplo = "https://deckofcardsapi.com/static/img/KD.png"; // Rey de Diamantes
 
     app.innerHTML = `
         <div class="contenedor-informacion">
             <div class="header-info">
-                <!-- Usamos la variable logoAPI aquí -->
-                <img src="${logoAPI}" alt="Logo API" class="logo-api" 
-                     onerror="this.src='img/logo-local.png'">
-                <h1>Deck of Cards API</h1>
+                <img src="img/logo-api.png" alt="Logo API" class="logo-api" 
+                     onerror="this.src='https://deckofcardsapi.com/static/img/logo.png'">
+                <h1>Magic Card Learning</h1>
             </div>
             
             <div class="card-info">
-                <!-- Usamos la variable cartaEjemplo aquí -->
-                <img src="${cartaEjemplo}" alt="Ejemplo de carta" class="carta-demo"
-                     onerror="this.src='img/carta-error.png'">
+                <div class="carta-especial">
+                    <img src="img/fondos/carta-magica.png" alt="Carta educativa" 
+                         onerror="this.src='https://deckofcardsapi.com/static/img/KH.png'">
+                </div>
                 
                 <div class="texto-info">
+                    <h2>✨ Sobre la App</h2>
                     <p>${studentData.descripcion}</p>
+                    
+                    <h2>🃏 Sobre la API</h2>
+                    <p>${studentData.apiDescripcion}</p>
+                    
                     <div class="datos-personales">
-                        <p><strong>Estudiante:</strong> ${studentData.nombre}</p>
-                        <p><strong>GitHub:</strong> ${studentData.github}</p>
-                        <p class="version">${studentData.version}</p>
+                        <h2>👨‍💻 Desarrollador</h2>
+                        <p><strong>Nombre:</strong> ${studentData.nombre}</p>
+                        <p><strong>GitHub:</strong> 
+                            <a href="https://github.com/${studentData.github}" target="_blank">
+                                @${studentData.github}
+                            </a>
+                        </p>
+                    </div>
+                    
+                    <div class="menu-info">
+                        <button onclick="mostrarInicio()">
+                            <img src="img/iconos/inicio-color.png" alt="Inicio">
+                            <span>Inicio</span>
+                        </button>
+                        <button onclick="mostrarJuego()">
+                            <img src="img/iconos/juego-color.png" alt="Juego">
+                            <span>Juego</span>
+                        </button>
                     </div>
                 </div>
             </div>
+            
+            <div class="version">${studentData.version}</div>
         </div>
     `;
 }
