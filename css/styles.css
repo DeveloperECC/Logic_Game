@@ -265,3 +265,119 @@ button:hover {
   margin: 0 auto 20px;
   max-width: 100px;
 }
+/* Agrega esto al final de tu archivo CSS existente */
+
+/* Estilos mejorados para niños */
+body {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: url('../img/fondo-ninos.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+}
+
+/* Pantalla de información mejorada */
+.info-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.info-card {
+  width: 150px;
+  height: 225px;
+  margin: 0 auto 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.info-card:hover {
+  transform: scale(1.05);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.info-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* Juego mejorado para niños */
+.juego-matematico {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.carta-juego {
+  width: 140px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 0 10px;
+  transition: transform 0.3s;
+}
+
+.carta-juego:hover {
+  transform: scale(1.05);
+}
+
+.valor-carta {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.operacion-actual {
+  font-size: 3rem;
+  color: #FF6B6B;
+  margin: 0 15px;
+}
+
+/* Botones más atractivos */
+button {
+  background-color: #4ECDC4;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+}
+
+button:hover {
+  background-color: #FF6B6B;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Efectos especiales */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.bounce-effect {
+  animation: bounce 1s infinite;
+}

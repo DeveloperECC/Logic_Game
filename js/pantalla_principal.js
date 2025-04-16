@@ -1,71 +1,78 @@
-llet mazoDeCartas = [];
+let mazosDisponibles = [
+  { nombre: "Todos los Mazos", id: "new" },
+  { nombre: "♠ Picas", id: "spades" },
+  { nombre: "♥ Corazones", id: "hearts" },
+  { nombre: "♦ Diamantes", id: "diamonds" },
+  { nombre: "♣ Tréboles", id: "clubs" }
+];
+
+let mazoActual = "new";
 
 async function mostrarInicio() {
   const app = document.getElementById('app');
   app.innerHTML = `
-    <h1>Bienvenido al Juego Educativo de Cartas</h1>
-    <p>¡Aprende jugando con cartas y diviértete!</p>
-    <input type="text" id="buscador" placeholder="Buscar por palo, valor...">
-    <div id="card-container" class="card-container"></div>
+    <h1 style="color:#FF6B6B;">🎴 Mazos Mágicos</h1>
+    <p>¡Elige un mazo y comienza a aprender!</p>
+    
+    <div style="display:flex;gap:10px;margin-bottom:20px;">
+      <select id="selector-mazo" style="padding:10px;border-radius:10px;flex-grow:1;">
+        ${mazosDisponibles.map(mazo => `
+          <option value="${mazo.id}">${mazo.nombre}</option>
+        `).join('')}
+      </select>
+      <button onclick="cargarMazoSeleccionado()" style="background-color:#4ECDC4;">🔍 Cargar</button>
+    </div>
+    
+    <input type="text" id="buscador" placeholder="🔎 Buscar cartas por nombre o valor..." 
+           style="padding:12px;width:100%;border-radius:20px;border:2px solid #4ECDC4;">
+    
+    <div id="card-container" class="card-container" style="margin-top:20px;"></div>
   `;
   
-  await cargarCartas();
+  document.getElementById('selector-mazo').addEventListener('change', function() {
+    mazoActual = this.value;
+  });
   
-  // Evento para filtro de búsqueda
-  document.getElementById('buscador').addEventListener('input', filtrarCartas);
+  document.getElementById('buscador').addEventListener('input', function(e) {
+    filtrarCartas(e);
+  });
+  
+  await cargarCartas();
+}
+
+async function cargarMazoSeleccionado() {
+  await cargarCartas();
 }
 
 async function cargarCartas() {
   const container = document.getElementById('card-container');
-  container.innerHTML = '<p>Cargando cartas...</p>';
+  container.innerHTML = '<p>Cargando cartas mágicas...</p>';
   
   try {
-    const mazo = await barajarMazo();
-    const cartasAPI = await sacarCartas(mazo.deck_id, 20);
-    mazoDeCartas = cartasAPI;
+    let cartasAPI;
+    if (mazoActual === "new") {
+      const mazo = await barajarMazo();
+      cartasAPI = await sacarCartas(mazo.deck_id, 20);
+    } else {
+      cartasAPI = await obtenerCartasPorPalo(mazoActual, 20);
+    }
     
-    container.innerHTML = mazoDeCartas.map(carta => `
-      <div class="card" data-palo="${carta.suit}" data-valor="${carta.value}">
-        <img src="${carta.image}" alt="${carta.code}">
-        <button onclick="agregarAFavoritos('${carta.code}')">Favorito</button>
-      </div>
-    `).join('');
+    mazoDeCartas = cartasAPI;
+    mostrarCartasEnContainer(mazoDeCartas, container);
   } catch (error) {
-    container.innerHTML = '<p>Error al cargar las cartas. Intenta recargar la página.</p>';
+    container.innerHTML = '<p>¡Las cartas mágicas se escondieron! Intenta de nuevo.</p>';
     console.error(error);
   }
 }
 
-function filtrarCartas(event) {
-  const textoFiltro = event.target.value.toLowerCase();
-  const cartasFiltradas = mazoDeCartas.filter(carta => {
-    return carta.suit.toLowerCase().includes(textoFiltro) || 
-           carta.value.toLowerCase().includes(textoFiltro) ||
-           carta.code.toLowerCase().includes(textoFiltro);
-  });
-
-  const container = document.getElementById('card-container');
-  container.innerHTML = cartasFiltradas.map(carta => `
-    <div class="card" data-palo="${carta.suit}" data-valor="${carta.value}">
-      <img src="${carta.image}" alt="${carta.code}">
-      <button onclick="agregarAFavoritos('${carta.code}')">Favorito</button>
-    </div>
-  `).join('');
-}
-
-function agregarAFavoritos(codigoCarta) {
-  let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
-  const carta = mazoDeCartas.find(c => c.code === codigoCarta);
-  
-  if (!favoritos.some(f => f.code === codigoCarta)) {
-    favoritos.push(carta);
-    localStorage.setItem('favoritos', JSON.stringify(favoritos));
-    alert(`Carta ${carta.value} de ${carta.suit} añadida a favoritos`);
-  } else {
-    alert('Esta carta ya está en favoritos');
+// Agrega esta función a conexion_api.js
+async function obtenerCartasPorPalo(palo, cantidad) {
+  try {
+    const respuesta = await fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${cantidad}&suits=${palo}`);
+    const datos = await respuesta.json();
+    return datos.cards;
+  } catch (error) {
+    console.error('Error al obtener cartas por palo:', error);
+    throw error;
   }
 }
-
-// Hacer funciones accesibles globalmente
-window.mostrarInicio = mostrarInicio;
-window.agregarAFavoritos = agregarAFavoritos;

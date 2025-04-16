@@ -4,8 +4,9 @@ function mostrarFavoritos() {
     
     app.innerHTML = `
       <h2>Tus Cartas Favoritas</h2>
-      ${favoritos.length === 0 ? '<p>No tienes cartas favoritas aún</p>' : ''}
+      ${favoritos.length === 0 ? '<p>No tienes cartas favoritas aún. Agrega algunas desde la pantalla principal.</p>' : ''}
       <div class="card-container" id="listaFavoritos"></div>
+      ${favoritos.length > 0 ? '<button onclick="limpiarFavoritos()" style="margin-top: 20px;">Limpiar Todos</button>' : ''}
     `;
     
     const listaFavoritos = document.getElementById('listaFavoritos');
@@ -24,9 +25,14 @@ function mostrarFavoritos() {
     favoritos = favoritos.filter(carta => carta.code !== codigoCarta);
     localStorage.setItem('favoritos', JSON.stringify(favoritos));
     mostrarFavoritos();
-    alert('Carta eliminada de favoritos');
+  }
+  
+  function limpiarFavoritos() {
+    localStorage.removeItem('favoritos');
+    mostrarFavoritos();
   }
   
   // Hacer funciones accesibles globalmente
   window.mostrarFavoritos = mostrarFavoritos;
   window.eliminarDeFavoritos = eliminarDeFavoritos;
+  window.limpiarFavoritos = limpiarFavoritos;
