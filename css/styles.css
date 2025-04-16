@@ -36,6 +36,47 @@
     font-size: 1.5rem;
     margin-bottom: 10px;
   }
+
+  /* Añadir al inicio del CSS */
+.nav-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+
+.menu-inferior button:hover .nav-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+/* Mejoras para el juego */
+.juego-matematico {
+    animation: aparecer 0.5s ease-out;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.carta-juego-container img {
+    transition: transform 0.3s;
+}
+
+.carta-juego-container:hover img {
+    transform: scale(1.05);
+}
+
+/* Efectos para feedback */
+.correcto {
+    animation: acierto 0.5s;
+}
+
+@keyframes acierto {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
   
   .buscador-container {
     max-width: 600px;
