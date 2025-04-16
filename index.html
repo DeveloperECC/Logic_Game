@@ -1,27 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Logic Game - Cartas Educativas</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="icon" type="image/png" href="img/iconos/info.png"/>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="img/iconos/info.png">
 </head>
 <body>
   <div id="pantalla-bienvenida">
-    <img src="img/fondo.png" alt="Bienvenida" class="fondo-inicial"/>
-    <h1>¡Bienvenido a Logic Game!</h1>
-    <p>Aprende lógica y matemáticas con cartas mágicas</p>
-    <button id="btn-empezar">¡Empezar!</button>
+    <div class="bienvenida-contenido">
+      <h1>¡Bienvenido a Logic Game!</h1>
+      <p>Aprende lógica y matemáticas con cartas mágicas</p>
+      <button id="btn-empezar">¡Empezar!</button>
+    </div>
   </div>
 
   <main id="app"></main>
 
   <nav class="menu-inferior">
-    <button onclick="cargarPantalla('inicio')">Inicio</button>
-    <button onclick="cargarPantalla('juego')">Juego</button>
-    <button onclick="cargarPantalla('favoritos')">Favoritos</button>
-    <button onclick="cargarPantalla('informacion')">Info</button>
+    <button onclick="cargarPantalla('inicio')">
+      <img src="img/iconos/inicio.png" alt="Inicio">
+      <span>Inicio</span>
+    </button>
+    <button onclick="cargarPantalla('juego')">
+      <img src="img/iconos/juego.png" alt="Juego">
+      <span>Juego</span>
+    </button>
+    <button onclick="cargarPantalla('favoritos')">
+      <img src="img/iconos/favoritos.png" alt="Favoritos">
+      <span>Favoritos</span>
+    </button>
+    <button onclick="cargarPantalla('informacion')">
+      <img src="img/iconos/info.png" alt="Información">
+      <span>Info</span>
+    </button>
   </nav>
 
   <script src="js/conexion_api.js"></script>

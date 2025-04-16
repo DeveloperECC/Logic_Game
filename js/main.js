@@ -8,12 +8,16 @@ document.addEventListener('DOMContentLoaded', function() {
       cargarPantalla('inicio');
     });
   
-    // Cargar pantalla inicial
-    cargarPantalla('inicio');
+    // Carga inicial
+    if (!window.location.hash) {
+      pantallaBienvenida.style.display = 'flex';
+    } else {
+      cargarPantalla(window.location.hash.substring(1));
+    }
   });
   
-  // Función para cargar las diferentes pantallas
   function cargarPantalla(pantalla) {
+    window.location.hash = pantalla;
     const app = document.getElementById('app');
     
     switch(pantalla) {
@@ -21,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mostrarInicio();
         break;
       case 'juego':
-        iniciarNuevoJuego();
+        iniciarJuego();
         break;
       case 'favoritos':
         mostrarFavoritos();
@@ -34,5 +38,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Hacer accesible la función desde el menú
   window.cargarPantalla = cargarPantalla;
