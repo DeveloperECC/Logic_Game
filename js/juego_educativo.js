@@ -66,6 +66,7 @@ async function mostrarJuego() {
                 
                 <div id="resultado"></div>
             </div>
+                   
         `;
     } catch (error) {
         app.innerHTML = '<div class="error">Error al cargar el juego. Intenta nuevamente.</div>';
@@ -100,3 +101,5 @@ function mostrarPista(valor1, valor2, operacion) {
     };
     document.getElementById("resultado").innerHTML = `<p class="pista">💡 ${pistas[operacion]}</p>`;
 }
+// En juego_educativo.js
+`<img src="${cartas[0].image}" alt="Carta">`
