@@ -172,7 +172,7 @@ main {
 
 /* ===== PANTALLA DE INICIO ===== */
 #app[data-pantalla="inicio"] {
-  background-image: url('../img/info.png');
+  background-image: url('../img/iconos/inicio.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
