@@ -28,9 +28,7 @@ body {
   flex-direction: column;
   background-color: var(--color-fondo);
   background-image: url('../img/iconos/carta.png') norepeat center center fixed;
-  background-size: cover;
   background-attachment: fixed;
-  background-blend-mode: overlay;
   line-height: 1.6;
   position: relative;
 }
