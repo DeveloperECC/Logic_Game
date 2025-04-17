@@ -26,14 +26,15 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-fondo);
-  background-image: url('../img/iconos/carta.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: fixed;
-  background-size: cover; /* o 'contain' dependiendo del efecto deseado */
+  background: 
+    var(--color-fondo) /* Color de respaldo */
+    url('../img/iconos/carta.png') /* Ruta corregida a la carpeta fondos */
+    center/cover /* Cubre todo el área manteniendo proporción */
+    no-repeat 
+    fixed; /* Fija el fondo al desplazar */
   line-height: 1.6;
   position: relative;
+  margin: 0; /* Elimina márgenes por defecto */
 }
 
 /* ===== PANTALLA DE BIENVENIDA ===== */
@@ -657,11 +658,12 @@ main {
 
 /* URL DE GITHUB */
 .info-url {
-  display: block;
-  margin-top: 5px;
+  display:inline-block;
+  margin-top: 4px;
   font-size: 0.9rem;
   color: var(--color-primario);
   font-weight: bold;
+  
 }
 
 /* RESPONSIVE */
@@ -683,6 +685,7 @@ main {
     flex-direction: column;
     text-align: center;
     padding: 1rem;
+    line-height: 1.6;
   }
   
   .info-icon {
@@ -726,6 +729,13 @@ main {
   html {
     font-size: 15px;
   }
+  /* Añade esto para dispositivos móviles */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll; /* Mejor rendimiento en móviles */
+    background-size: cover;
+  }
+}
   
   main {
     padding: 1.5rem;
