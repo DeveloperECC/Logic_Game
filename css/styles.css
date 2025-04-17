@@ -441,7 +441,7 @@ main {
 
 /* ===== PANTALLA DE FAVORITOS ===== */
 #app[data-pantalla="favoritos"] {
-  background-image: url('../img/fondos/fondo-favoritos.jpg');
+  background-image: url('../img/iconos/fonfavoritos.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -475,7 +475,7 @@ main {
 
 /* ===== PANTALLA DE INFORMACIÓN ===== */
 #app[data-pantalla="informacion"] {
-  background-image: url('../img/fondos/fondo-info.jpg');
+  background-image: url('../img/iconos/info1.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
