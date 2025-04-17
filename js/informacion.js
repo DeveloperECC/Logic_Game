@@ -30,18 +30,18 @@ async function mostrarInformacion() {
         
         <div class="info-grid">
           <div class="info-item">
-            <img src="img/iconos/desarrollador.png" class="info-icon" alt="Desarrollador">
-            <span>Desarrollado por: Elmer Cabrera Cortez</span>
-            <span class="info-url">GitHub.com/DeveloperECC</span>
+            <img src="img/iconos/juego.png" class="info-icon" alt="Desarrollador">
+            <span>Desarrollado por: Elmer Cabrera Cortez</span><br>
+          <span class="info-url">GitHub.com/DeveloperECC</span>
           </div>
           
           <div class="info-item">
-            <img src="img/iconos/version.png" class="info-icon" alt="Versión">
+            <img src="img/iconos/info1.png" class="info-icon" alt="Versión">
             <span>Versión: 1.0.0</span>
           </div>
           
           <div class="info-item">
-            <img src="img/iconos/api.png" class="info-icon" alt="API">
+            <img src="img/iconos/foninfo.png" class="info-icon" alt="API">
             <span>API: Deck of Cards</span>
           </div>
         </div>
