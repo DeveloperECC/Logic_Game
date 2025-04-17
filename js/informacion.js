@@ -14,7 +14,7 @@ async function mostrarInformacion() {
   
     app.innerHTML = `
       <div class="info-container">
-        <h2>✨ Sobre Logic Game ✨</h2>
+        <h2>✨ Sobre Logic Game Y la API deck of cards ✨</h2>
         
         <div class="info-card-container">
           ${cartaAleatoria ? `
@@ -24,7 +24,7 @@ async function mostrarInformacion() {
             </div>
           ` : `
             <div class="info-card">
-              <img src="img/carta-especial.png" alt="Carta mágica">
+              <img src="img/iconos/carta.png" alt="Carta mágica">
               <p class="carta-desc">Carta especial</p>
             </div>
           `}
@@ -32,24 +32,26 @@ async function mostrarInformacion() {
         
         <div class="info-grid">
           <div class="info-item">
-            <img src="img/iconos/desarrollador.png" class="info-icon" alt="Desarrollador">
-            <span>Desarrollado por: Elmer y equipo</span>
+            <img src="img/iconos/juego.png" class="info-icon" alt="Desarrollador">
+            <span>Desarrollado por: ELMER CABRERA CORTEZ</span>
+             <span>url: GitHub.com/DeveloperECC</span>
+
           </div>
           
           <div class="info-item">
-            <img src="img/iconos/version.png" class="info-icon" alt="Versión">
-            <span>Versión: 2.0.0</span>
+            <img src="img/iconos/inicio.png" class="info-icon" alt="Versión">
+            <span>Versión: 1.0.0</span>
           </div>
           
           <div class="info-item">
-            <img src="img/iconos/api.png" class="info-icon" alt="API">
+            <img src="img/iconos/info.png" class="info-icon" alt="API">
             <span>API: Deck of Cards</span>
           </div>
         </div>
         
         <p class="info-descripcion">
           Logic Game es una aplicación educativa diseñada para hacer el aprendizaje 
-          de las matemáticas divertido e interactivo para niños y adultos.
+          de las matemáticas divertido e interactivo para niños y adultos, enlazada con la API,Deck of Cards .
         </p>
       </div>
     `;

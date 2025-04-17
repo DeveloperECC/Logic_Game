@@ -27,8 +27,11 @@ body {
   display: flex;
   flex-direction: column;
   background-color: var(--color-fondo);
-  background-image: url('../img/iconos/carta.png') norepeat center center fixed;
+  background-image: url('../img/iconos/carta.png');
+  background-repeat: no-repeat;
+  background-position: center center;
   background-attachment: fixed;
+  background-size: cover; /* o 'contain' dependiendo del efecto deseado */
   line-height: 1.6;
   position: relative;
 }
@@ -485,13 +488,46 @@ main {
   background-color: rgba(255, 255, 255, 0.4);
 }
 
+/* Contenedor de información con fondo mágico */
 .info-container {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2.5rem;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  max-width: 700px;
+  background: 
+    linear-gradient(rgba(255, 255, 255, 0.85), 
+    url('../img/foninfo.png') center/cover no-repeat;
+  border: 3px solid #f1c40f;
+  border-radius: 15px;
+  box-shadow: 
+    0 0 20px rgba(241, 196, 15, 0.5),
+    0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  max-width: 800px;
   margin: 2rem auto;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(3px);
+}
+
+/* Efecto mágico adicional */
+.info-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: radial-gradient(
+    circle, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 215, 0, 0.05) 50%, 
+    transparent 70%
+  );
+  z-index: -1;
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .info-container h2 {
