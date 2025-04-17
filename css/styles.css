@@ -480,48 +480,100 @@ main {
 
 /* ===== PANTALLA DE INFORMACIÓN ===== */
 #app[data-pantalla="informacion"] {
-  background-image: url('../img/iconos/info1.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-blend-mode: overlay;
-  background-color: rgba(255, 255, 255, 0.4);
+  background: 
+    url('../img/fondos/fondo-seccion-info.jpg') center/cover no-repeat fixed;
+  padding: 20px;
+  min-height: calc(100vh - 80px); /* Ajuste para el menú inferior */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Contenedor de información con fondo mágico */
+/* Contenedor principal de información */
 .info-container {
   background: 
-    linear-gradient(rgba(255, 255, 255, 0.85), 
-    url('../img/foninfo.png') center/cover no-repeat;
+    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+    url('../img/fondos/fondo-contenedor-info.png') center/cover no-repeat;
   border: 3px solid #f1c40f;
   border-radius: 15px;
-  box-shadow: 
-    0 0 20px rgba(241, 196, 15, 0.5),
-    0 10px 30px rgba(0, 0, 0, 0.2);
-  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 40px;
   max-width: 800px;
-  margin: 2rem auto;
+  width: 90%;
+  margin: 20px auto;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(3px);
+  text-align: center; /* Centrado de todo el contenido */
 }
 
-/* Efecto mágico adicional */
+/* Carta de la API */
+.info-card {
+  width: 200px;
+  height: 300px;
+  margin: 0 auto 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: 4px solid #f1c40f;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.info-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Contenido de información */
+.info-content {
+  color: #2c3e50;
+  text-align: center;
+  width: 100%;
+}
+
+.info-content h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.info-content p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Icono de información */
+.info-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 25px;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(241, 196, 15, 0.5));
+}
+
+/* Efectos especiales */
 .info-container::before {
   content: '';
   position: absolute;
   top: -50%;
   left: -50%;
-  right: -50%;
-  bottom: -50%;
+  width: 200%;
+  height: 200%;
   background: radial-gradient(
     circle, 
-    rgba(255, 255, 255, 0.1) 0%, 
-    rgba(255, 215, 0, 0.05) 50%, 
+    rgba(255, 215, 0, 0.1) 0%, 
     transparent 70%
   );
-  z-index: -1;
   animation: rotate 20s linear infinite;
+  z-index: 0;
 }
 
 @keyframes rotate {
@@ -530,6 +582,21 @@ main {
   }
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+  .info-container {
+    padding: 30px 20px;
+  }
+  
+  .info-card {
+    width: 180px;
+    height: 270px;
+  }
+  
+  .info-content h2 {
+    font-size: 1.8rem;
+  }
+}
 .info-container h2 {
   color: var(--color-primario);
   margin-bottom: 1.5rem;
