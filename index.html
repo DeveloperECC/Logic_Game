@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self' https://deckofcardsapi.com https://*.deckofcardsapi.com; 
+               connect-src 'self' https://deckofcardsapi.com;
+               img-src 'self' data: https://deckofcardsapi.com;
+               script-src 'self' 'unsafe-inline' 'unsafe-eval';
+               style-src 'self' 'unsafe-inline'">
   <title>Logic Game - Cartas Educativas</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/png" href="img/iconos/info.png">

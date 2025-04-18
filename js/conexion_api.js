@@ -1,39 +1,52 @@
 // Versión mejorada con manejo de errores
 const API_BASE = 'https://deckofcardsapi.com/api/deck';
 
-async function barajarMazo() {
+// Función mejorada para Android
+async function fetchData(url) {
   try {
-    const response = await fetch(`${API_BASE}/new/shuffle/?deck_count=1`);
-    if (!response.ok) throw new Error('Error al barajar');
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     return await response.json();
   } catch (error) {
-    console.error('Error barajando mazo:', error);
+    console.error('Fetch error:', error);
+    // Sistema de fallback para Android
+    if (window.androidFallback) {
+      return window.androidFallback.getLocalCards();
+    }
     throw error;
   }
+}
+
+async function barajarMazo() {
+  return fetchData(`${API_BASE}/new/shuffle/?deck_count=1`);
 }
 
 async function sacarCartas(deckId, count) {
-  try {
-    const response = await fetch(`${API_BASE}/${deckId}/draw/?count=${count}`);
-    if (!response.ok) throw new Error('Error al sacar cartas');
-    const data = await response.json();
-    return data.cards;
-  } catch (error) {
-    console.error('Error sacando cartas:', error);
-    throw error;
-  }
+  const data = await fetchData(`${API_BASE}/${deckId}/draw/?count=${count}`);
+  return data.cards;
 }
 
 async function obtenerMazoCompleto() {
-  try {
-    const response = await fetch(`${API_BASE}/new/draw/?count=52`);
-    if (!response.ok) throw new Error('Error al obtener mazo completo');
-    const data = await response.json();
-    return data.cards;
-  } catch (error) {
-    console.error('Error obteniendo mazo completo:', error);
-    throw error;
-  }
+  const data = await fetchData(`${API_BASE}/new/draw/?count=52`);
+  return data.cards;
+}
+
+// Exportación para Android
+if (window.AndroidInterface) {
+  window.AndroidInterface.registerAPI({
+    barajarMazo,
+    sacarCartas,
+    obtenerMazoCompleto
+  });
 }
 
 window.barajarMazo = barajarMazo;
