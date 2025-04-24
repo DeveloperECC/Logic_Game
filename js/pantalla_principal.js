@@ -21,24 +21,27 @@ async function mostrarInicio() {
     <div id="card-container" class="card-container"></div>
   `;
 
+  const loading = document.getElementById('loading');
+
   // Cargar todas las cartas al inicio
   if (todasLasCartas.length === 0) {
     try {
-      document.getElementById('loading').style.display = 'block';
+      loading.style.display = 'block';
       const response = await fetch('https://deckofcardsapi.com/api/deck/new/draw/?count=52');
       const data = await response.json();
       todasLasCartas = data.cards;
       mostrarCartas(todasLasCartas);
     } catch (error) {
       console.error('Error al cargar cartas:', error);
-      document.getElementById('loading').innerHTML = `
+      loading.innerHTML = `
         <p class="error">Error al cargar las cartas. Por favor recarga la página.</p>
       `;
     } finally {
-      document.getElementById('loading').style.display = 'none';
+      loading.style.display = 'none';
     }
   } else {
     mostrarCartas(todasLasCartas);
+    loading.style.display = 'none'; // También ocultar si ya están en caché
   }
 
   // Event listeners

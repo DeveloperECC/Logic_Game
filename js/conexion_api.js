@@ -1,54 +1,74 @@
 // Versión mejorada con manejo de errores
+// conexion_api.js
+
+// conexion_api.js
+
 const API_BASE = 'https://deckofcardsapi.com/api/deck';
 
-// Función mejorada para Android
-async function fetchData(url) {
+// 🔄 Baraja un nuevo mazo y devuelve su deck_id
+export async function barajarMazo() {
   try {
-    const response = await fetch(url, {
+    const respuesta = await fetch(`${API_BASE}/new/shuffle/?deck_count=1`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
     });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+
+    if (!respuesta.ok) {
+      throw new Error(`Error HTTP al barajar: ${respuesta.status}`);
     }
-    
-    return await response.json();
+
+    const datos = await respuesta.json();
+    return datos.deck_id;
   } catch (error) {
-    console.error('Fetch error:', error);
-    // Sistema de fallback para Android
-    if (window.androidFallback) {
-      return window.androidFallback.getLocalCards();
+    console.error('Error al barajar mazo:', error);
+
+    if (window.androidFallback && typeof window.androidFallback.getFallbackDeckId === 'function') {
+      return window.androidFallback.getFallbackDeckId(); // Android fallback
     }
-    throw error;
+
+    return null;
   }
 }
 
-async function barajarMazo() {
-  return fetchData(`${API_BASE}/new/shuffle/?deck_count=1`);
+// 🃏 Obtiene un mazo completo de 52 cartas
+export async function obtenerCartas() {
+  try {
+    const respuesta = await fetch(`${API_BASE}/new/draw/?count=52`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!respuesta.ok) {
+      throw new Error(`Error HTTP: ${respuesta.status}`);
+    }
+
+    const datos = await respuesta.json();
+    return datos.cards;
+  } catch (error) {
+    console.error('Error al obtener cartas:', error);
+
+    if (window.androidFallback && typeof window.androidFallback.getLocalCards === 'function') {
+      return window.androidFallback.getLocalCards(); // Android fallback
+    }
+
+    return [];
+  }
 }
 
-async function sacarCartas(deckId, count) {
-  const data = await fetchData(`${API_BASE}/${deckId}/draw/?count=${count}`);
-  return data.cards;
-}
-
-async function obtenerMazoCompleto() {
-  const data = await fetchData(`${API_BASE}/new/draw/?count=52`);
-  return data.cards;
-}
-
-// Exportación para Android
+// 📲 Compatibilidad con Android WebView
 if (window.AndroidInterface) {
   window.AndroidInterface.registerAPI({
     barajarMazo,
     sacarCartas,
-    obtenerMazoCompleto
+    obtenerCartas
   });
 }
 
+// También disponibles globalmente en el navegador
 window.barajarMazo = barajarMazo;
 window.sacarCartas = sacarCartas;
-window.obtenerMazoCompleto = obtenerMazoCompleto;
+window.obtenerCartas = obtenerCartas;
