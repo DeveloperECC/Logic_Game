@@ -15,7 +15,7 @@ async function mostrarInformacion() {
   app.innerHTML = `
     <div class="info-container">
       <div class="info-content">
-        <img src="img/iconos/info.png" class="info-icon" alt="Icono información">
+        <img src="../assets/img/iconos/info.png" class="info-icon" alt="Icono información">
         <h2>✨ Sobre Logic Game y la API Deck of Cards ✨</h2>
         
         <div class="info-card">
@@ -23,25 +23,25 @@ async function mostrarInformacion() {
             <img src="${cartaAleatoria.image}" alt="${cartaAleatoria.value} of ${cartaAleatoria.suit}">
             <p class="carta-desc">Carta del día: ${cartaAleatoria.value} de ${cartaAleatoria.suit}</p>
           ` : `
-            <img src="img/iconos/carta.png" alt="Carta mágica">
+            <img src="../assets/img/iconos/carta.png" alt="Carta mágica">
             <p class="carta-desc">Carta especial</p>
           `}
         </div>
         
         <div class="info-grid">
           <div class="info-item">
-            <img src="img/iconos/juego.png" class="info-icon" alt="Desarrollador">
+            <img src="../assets/img/iconos/juego.png" class="info-icon" alt="Desarrollador">
             <span>Desarrollado por: Elmer Cabrera Cortez</span><br>
           <span class="info-url">GitHub.com/DeveloperECC</span>
           </div>
           
           <div class="info-item">
-            <img src="img/iconos/info1.png" class="info-icon" alt="Versión">
+            <img src="../assets/img/iconos/info1.png" class="info-icon" alt="Versión">
             <span>Versión: 1.0.0</span>
           </div>
           
           <div class="info-item">
-            <img src="img/iconos/foninfo.png" class="info-icon" alt="API">
+            <img src="../assets/img/iconos/foninfo.png" class="info-icon" alt="API">
             <span>API: Deck of Cards</span>
           </div>
         </div>

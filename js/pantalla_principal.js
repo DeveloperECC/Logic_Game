@@ -1,5 +1,23 @@
 let todasLasCartas = [];
 let mazoActual = 'all';
+// Verifica si localStorage está disponible
+const storage = (() => {
+  try {
+    return window.localStorage;
+  } catch (e) {
+    return {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {}
+    };
+  }
+})();
+
+// Usa storage en lugar de localStorage directamente
+function esFavorita(codigoCarta) {
+  const favoritos = JSON.parse(storage.getItem('favoritos') || '[]');
+  return favoritos.some(carta => carta.code === codigoCarta);
+}
 
 async function mostrarInicio() {
   const app = document.getElementById('app');
@@ -134,3 +152,4 @@ function mostrarMensaje(mensaje) {
 
 window.mostrarInicio = mostrarInicio;
 window.toggleFavorito = toggleFavorito;
+
