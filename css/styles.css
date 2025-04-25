@@ -28,7 +28,7 @@ body {
   flex-direction: column;
   background: 
     var(--color-fondo) /* Color de respaldo */
-    url('../assets/img/info.png') /* Ruta corregida a la carpeta fondos */
+    url('assets/img/foninfo.png') /* Ruta corregida a la carpeta fondos */
     center/cover /* Cubre todo el área manteniendo proporción */
     no-repeat 
     fixed; /* Fija el fondo al desplazar */
@@ -44,7 +44,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../assets/img/iconos/inicio.png');
+  background-image: url('assets/img/iconos/inicio.png');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -178,7 +178,7 @@ main {
 
 /* ===== PANTALLA DE INICIO ===== */
 #app[data-pantalla="inicio"] {
-  background-image: url('../assets/img/iconos/inicio.png');
+  background-image: url('assets/img/iconos/inicio.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -282,7 +282,7 @@ main {
 
 /* ===== PANTALLA DE JUEGO ===== */
 #app[data-pantalla="juego"] {
-  background-image: url('../assets/img/iconos/juego.png');
+  background-image: url('assets/img/iconos/juego.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -448,7 +448,7 @@ main {
 
 /* ===== PANTALLA DE FAVORITOS ===== */
 #app[data-pantalla="favoritos"] {
-  background-image: url('../assets/img/iconos/fonfavoritos.png');
+  background-image: url('assets/img/iconos/favoritos.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -495,7 +495,7 @@ main {
 /* ===== PANTALLA DE INFORMACIÓN ===== */
 #app[data-pantalla="informacion"] {
   background: 
-    url('../assets/img/iconos/info.jpg') center/cover no-repeat fixed;
+    url('assets/img/foninfo.png') center/cover no-repeat fixed;
   padding: 20px;
   min-height: calc(100vh - 80px);
   display: flex;
