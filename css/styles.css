@@ -28,7 +28,7 @@ body {
   flex-direction: column;
   background: 
     var(--color-fondo) /* Color de respaldo */
-    url('assets/img/foninfo.png') /* Ruta corregida a la carpeta fondos */
+    url('assets/iconos/foninfo.png') /* Ruta corregida a la carpeta fondos */
     center/cover /* Cubre todo el área manteniendo proporción */
     no-repeat 
     fixed; /* Fija el fondo al desplazar */
@@ -495,7 +495,7 @@ main {
 /* ===== PANTALLA DE INFORMACIÓN ===== */
 #app[data-pantalla="informacion"] {
   background: 
-    url('assets/img/foninfo.png') center/cover no-repeat fixed;
+    url('assets/img/iconos/foninfo.png') center/cover no-repeat fixed;
   padding: 20px;
   min-height: calc(100vh - 80px);
   display: flex;
