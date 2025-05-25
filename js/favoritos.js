@@ -23,7 +23,7 @@ function mostrarFavoritos() {
         <div class="card">
           <img src="${carta.image}" alt="${carta.value} of ${carta.suit}">
           <button class="favorito" onclick="toggleFavorito('${carta.code}')">
-            <img src="img/iconos/favorito-lleno.png" alt="Quitar de favoritos">
+            <img src="assets/img/iconos/favorito-lleno.png" alt="Quitar de favoritos">
           </button>
         </div>
       `).join('');
