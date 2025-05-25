@@ -9,13 +9,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "css/assets/img/iconos/icono:_inicio.png", 
+      "src": "css/assets/img/iconos/logicgame-icon-192x192.png", 
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable" 
     },
     {
-      "src": "css/assets/img/iconos/splash:_logic.png", 
+      "src": "css/assets/img/iconos/logicgame-icon-512x512.png", 
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
