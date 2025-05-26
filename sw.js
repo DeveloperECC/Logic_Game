@@ -1,65 +1,55 @@
-// Logic_Game-main/sw.js
+// sw.js (ubicado en la raíz de la rama 'pwa' de tu repo 'LOGIC_GAME')
+// Se servirá desde https://developerecc.github.io/LOGIC_GAME/sw.js
+// Su scope será https://developerecc.github.io/LOGIC_GAME/
 
-const CACHE_NAME = 'logicgame-cache-v1.2'; // Incrementa la 'vX.X' si cambias los archivos cacheados
+const CACHE_NAME = 'logicgame-cache-v1.3'; // Incrementa versión para forzar actualización
 
-// Lista de archivos que componen el "App Shell" y son cruciales para la carga inicial.
-// Asegúrate de que todas las rutas sean correctas desde la raíz de tu sitio.
+// Estas rutas son relativas al scope del Service Worker.
+// Si sw.js está en /LOGIC_GAME/sw.js y el scope es /LOGIC_GAME/,
+// 'index.html' se refiere a /LOGIC_GAME/index.html.
+// './' o '/' se refieren a /LOGIC_GAME/.
 const APP_SHELL_RESOURCES = [
-    '/',                        // Cachea la raíz (generalmente tu index.html)
-    'index.html',
-    'css/styles.css',
-    'manifest.json',            // El manifest también se puede cachear
+    './',                       // Cachea la raíz del scope (/LOGIC_GAME/)
+    'index.html',               // Cachea /LOGIC_GAME/index.html
+    'css/styles.css',           // Cachea /LOGIC_GAME/css/styles.css
+    'manifest.json',            // Cachea /LOGIC_GAME/manifest.json (si está en la raíz de la rama)
 
-    // Tus scripts JS principales
-    'js/main.js',               // Asumiendo que este es tu script principal que carga otros
+    'js/main.js',
     'js/conexion_api.js',
     'js/pantalla_principal.js',
     'js/juego.js',
     'js/favoritos.js',
     'js/informacion.js',
 
-    // Iconos PWA (los que están en tu manifest)
     'assets/img/iconos/logicgame-icon-192x192.png',
     'assets/img/iconos/logicgame-icon-512x512.png',
-
-    // Iconos importantes de la UI y favicon
-    'assets/img/iconos/foninfo.png', // Tu favicon actual
+    'assets/img/iconos/foninfo.png',
     'assets/img/iconos/inicio.png',
     'assets/img/iconos/juego.png',
     'assets/img/iconos/favoritos.png',
     'assets/img/iconos/info1.png',
-    // 'assets/img/iconos/carta.png', // Si este icono es usado en la carga inicial
-
-    // Imágenes de fondo si son cruciales para la primera pintura y no muy grandes
-    // 'assets/img/foninfo.png', // Evalúa si es necesario cachearlo siempre
-    // 'assets/img/iconos/fonfavoritos.png' // Igual aquí
 ];
 
-// Evento 'install': Se dispara cuando el Service Worker se instala.
-// Usado para cachear los recursos del App Shell.
 self.addEventListener('install', (event) => {
-    console.log('[SW] Evento: install');
+    console.log('[SW] Evento: install. Cache Name:', CACHE_NAME);
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('[SW] Cacheando App Shell:', APP_SHELL_RESOURCES);
+                console.log('[SW] Cacheando App Shell:', APP_SHELL_RESOURCES.map(url => new URL(url, self.location.origin + self.registration.scope).pathname));
                 return cache.addAll(APP_SHELL_RESOURCES);
             })
             .catch(error => {
                 console.error('[SW] Falló cache.addAll durante la instalación:', error);
-                // Si falla el cacheo de algún recurso crítico, la instalación del SW podría fallar.
             })
             .then(() => {
                 console.log('[SW] App Shell cacheado. Forzando activación con skipWaiting().');
-                return self.skipWaiting(); // Hace que el nuevo SW se active inmediatamente
+                return self.skipWaiting();
             })
     );
 });
 
-// Evento 'activate': Se dispara después de 'install' y cuando el SW toma control.
-// Usado para limpiar cachés antiguas que ya no son necesarias.
 self.addEventListener('activate', (event) => {
-    console.log('[SW] Evento: activate');
+    console.log('[SW] Evento: activate. Cache Name:', CACHE_NAME);
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
@@ -72,49 +62,41 @@ self.addEventListener('activate', (event) => {
             );
         }).then(() => {
             console.log('[SW] Cachés antiguas limpiadas. Reclamando clientes...');
-            return self.clients.claim(); // Permite que el SW tome control de los clientes abiertos inmediatamente
+            return self.clients.claim();
         })
     );
 });
 
-// Evento 'fetch': Se dispara cada vez que la PWA hace una petición de red.
-// Aquí implementamos una estrategia de caché "Cache First, then Network".
 self.addEventListener('fetch', (event) => {
-    // No queremos cachear las peticiones a la API de Deck of Cards con esta estrategia simple,
-    // ya que esos datos deben ser frescos o la API maneja su propio cacheo.
     if (event.request.url.includes('deckofcardsapi.com')) {
-        // console.log('[SW] Petición a API (red):', event.request.url);
         event.respondWith(fetch(event.request));
         return;
     }
 
-    // console.log('[SW] Evento: fetch para ->', event.request.url);
     event.respondWith(
-        caches.match(event.request) // Intenta encontrar la petición en la caché actual
+        caches.match(event.request)
             .then((cachedResponse) => {
                 if (cachedResponse) {
-                    // console.log('[SW] Sirviendo desde CACHÉ:', event.request.url);
-                    return cachedResponse; // Si está en caché, la devuelve
+                    return cachedResponse;
                 }
-                // console.log('[SW] No en caché, yendo a la RED:', event.request.url);
                 return fetch(event.request).then((networkResponse) => {
-                    // Opcional: Si quieres cachear dinámicamente nuevos recursos que no estaban
-                    // en el App Shell, podrías abrir la caché y añadir la respuesta aquí.
-                    // Por ejemplo, para imágenes de cartas que se cargan después.
-                    // Ten cuidado de no llenar la caché con demasiadas cosas.
-                    // if (networkResponse.ok && event.request.method === 'GET' && event.request.url.startsWith(self.location.origin)) {
+                    // Opcional: Cacheo dinámico
+                    // if (networkResponse.ok && event.request.method === 'GET' &&
+                    //     (event.request.url.startsWith(self.location.origin + self.registration.scope) ||
+                    //      event.request.url.startsWith(self.location.origin + '/LOGIC_GAME/'))) { // Asegurar que solo cacheamos recursos propios
                     //   const responseToCache = networkResponse.clone();
                     //   caches.open(CACHE_NAME).then(cache => {
+                    //     console.log('[SW] Cacheando dinámicamente:', event.request.url);
                     //     cache.put(event.request, responseToCache);
                     //   });
                     // }
-                    return networkResponse; // Sirve desde la red
+                    return networkResponse;
                 });
             })
             .catch(error => {
                 console.error('[SW] Error en fetch:', event.request.url, error);
-                // Aquí podrías devolver una página offline genérica si la tuvieras cacheada
-                // ej: return caches.match('/offline.html');
+                // Considera servir una página offline genérica si tienes una
+                // return caches.match('/LOGIC_GAME/offline.html');
             })
     );
 });
