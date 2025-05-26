@@ -12,22 +12,20 @@
   <title>Logic Game - Cartas Educativas</title>
   <link rel="stylesheet" href="css/styles.css">
   
-  <!-- Favicon actualizado -->
   <link rel="icon" type="image/png" href="assets/img/iconos/info1.png"> 
 
   <!-- PWA Manifest & Theme Color -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/Logic_Game/manifest.json"> {/* RUTA ABSOLUTA PARA CONSISTENCIA */}
   <meta name="theme-color" content="#3498db">
 
-  <!-- Meta tags para iOS/Apple -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <!-- Sugerencia de Chrome, buena tenerla -->
   <meta name="mobile-web-app-capable" content="yes"> 
   <meta name="apple-mobile-web-app-status-bar-style" content="default"> 
   <meta name="apple-mobile-web-app-title" content="LogicGame">
   <link rel="apple-touch-icon" href="assets/img/iconos/logicgame-icon-192x192.png"> 
 </head>
 <body>
+  <!-- ... el resto del body permanece igual ... -->
   <div id="pantalla-bienvenida">
     <div class="bienvenida-contenido">
       <h1>¡Bienvenido a Logic Game!</h1>
@@ -39,7 +37,6 @@
   <main id="app"></main>
 
   <nav class="menu-inferior">
-    <!-- Asegúrate de que aquí no haya comentarios de JS tampoco -->
     <button onclick="appCargarPantalla('inicio')">
       <img src="assets/img/iconos/inicio.png" alt="Inicio">
       <span>Inicio</span>
