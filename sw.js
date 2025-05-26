@@ -1,65 +1,67 @@
 // Logic_Game-main/sw.js
 
-const CACHE_NAME = 'logicgame-cache-v1.2'; // Incrementa la 'vX.X' si cambias los archivos cacheados
+// Incrementa la versión del caché cada vez que cambies los archivos cacheados
+// o la lógica del SW.
+const CACHE_NAME = 'logicgame-cache-v1.3'; // Nueva versión
 
-// Lista de archivos que componen el "App Shell" y son cruciales para la carga inicial.
-// Asegúrate de que todas las rutas sean correctas desde la raíz de tu sitio.
+// Lista de archivos que componen el "App Shell".
+// Asegúrate de que todas las rutas sean relativas a la raíz de tu sitio,
+// donde se encuentra este sw.js.
 const APP_SHELL_RESOURCES = [
-    '/',                        // Cachea la raíz (generalmente tu index.html)
-    'index.html',
-    'css/styles.css',
-    'manifest.json',            // El manifest también se puede cachear
-
+    './index.html',             // Ruta explícita, coincide con start_url sugerido
+    './manifest.json',          // Ruta explícita para el manifest
+    './css/styles.css',
+    
     // Tus scripts JS principales
-    'js/main.js',               // Asumiendo que este es tu script principal que carga otros
-    'js/conexion_api.js',
-    'js/pantalla_principal.js',
-    'js/juego.js',
-    'js/favoritos.js',
-    'js/informacion.js',
+    './js/main.js',
+    './js/conexion_api.js',
+    './js/pantalla_principal.js',
+    './js/juego.js',
+    './js/favoritos.js',
+    './js/informacion.js',
 
     // Iconos PWA (los que están en tu manifest)
-    'assets/img/iconos/logicgame-icon-192x192.png',
-    'assets/img/iconos/logicgame-icon-512x512.png',
+    './assets/img/iconos/logicgame-icon-192x192.png',
+    './assets/img/iconos/logicgame-icon-512x512.png',
 
-    // Iconos importantes de la UI y favicon
-    'assets/img/iconos/foninfo.png', // Tu favicon actual
-    'assets/img/iconos/inicio.png',
-    'assets/img/iconos/juego.png',
-    'assets/img/iconos/favoritos.png',
-    'assets/img/iconos/info1.png',
-    // 'assets/img/iconos/carta.png', // Si este icono es usado en la carga inicial
-
-    // Imágenes de fondo si son cruciales para la primera pintura y no muy grandes
-    // 'assets/img/foninfo.png', // Evalúa si es necesario cachearlo siempre
-    // 'assets/img/iconos/fonfavoritos.png' // Igual aquí
+    // Iconos importantes de la UI y otros assets para la carga inicial
+    // Asegúrate de que estas rutas son correctas y los archivos existen.
+    './assets/img/iconos/foninfo.png', 
+    './assets/img/iconos/inicio.png',
+    './assets/img/iconos/juego.png',
+    './assets/img/iconos/favoritos.png',
+    './assets/img/iconos/info1.png',
+    // './assets/img/iconos/carta.png', // Descomenta si es crucial para la primera carga
+    
+    // Considera cachear también la raíz si tu servidor podría servirla
+    // de forma diferente a index.html, aunque con start_url explícito,
+    // './index.html' es el más importante.
+    // './' 
 ];
 
-// Evento 'install': Se dispara cuando el Service Worker se instala.
-// Usado para cachear los recursos del App Shell.
 self.addEventListener('install', (event) => {
-    console.log('[SW] Evento: install');
+    console.log('[SW] Evento: install. Cacheando App Shell para CACHE_NAME:', CACHE_NAME);
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
                 console.log('[SW] Cacheando App Shell:', APP_SHELL_RESOURCES);
+                // Si addAll falla, es porque alguna de las URL no es accesible (404, error de red)
                 return cache.addAll(APP_SHELL_RESOURCES);
             })
             .catch(error => {
                 console.error('[SW] Falló cache.addAll durante la instalación:', error);
-                // Si falla el cacheo de algún recurso crítico, la instalación del SW podría fallar.
+                // Este error es crítico. Si ocurre, el SW no se instalará correctamente.
+                // Revisa las rutas en APP_SHELL_RESOURCES y la conexión de red.
             })
             .then(() => {
-                console.log('[SW] App Shell cacheado. Forzando activación con skipWaiting().');
-                return self.skipWaiting(); // Hace que el nuevo SW se active inmediatamente
+                console.log('[SW] App Shell cacheado correctamente. Forzando activación con skipWaiting().');
+                return self.skipWaiting(); // Activa el nuevo SW inmediatamente
             })
     );
 });
 
-// Evento 'activate': Se dispara después de 'install' y cuando el SW toma control.
-// Usado para limpiar cachés antiguas que ya no son necesarias.
 self.addEventListener('activate', (event) => {
-    console.log('[SW] Evento: activate');
+    console.log('[SW] Evento: activate. Limpiando cachés antiguas.');
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
@@ -72,49 +74,51 @@ self.addEventListener('activate', (event) => {
             );
         }).then(() => {
             console.log('[SW] Cachés antiguas limpiadas. Reclamando clientes...');
-            return self.clients.claim(); // Permite que el SW tome control de los clientes abiertos inmediatamente
+            return self.clients.claim(); // Toma control de las páginas abiertas
         })
     );
 });
 
-// Evento 'fetch': Se dispara cada vez que la PWA hace una petición de red.
-// Aquí implementamos una estrategia de caché "Cache First, then Network".
 self.addEventListener('fetch', (event) => {
-    // No queremos cachear las peticiones a la API de Deck of Cards con esta estrategia simple,
-    // ya que esos datos deben ser frescos o la API maneja su propio cacheo.
+    // No cachear peticiones a la API externa
     if (event.request.url.includes('deckofcardsapi.com')) {
-        // console.log('[SW] Petición a API (red):', event.request.url);
+        // console.log('[SW] Petición a API externa (directo a red):', event.request.url);
         event.respondWith(fetch(event.request));
         return;
     }
 
-    // console.log('[SW] Evento: fetch para ->', event.request.url);
+    // Para todas las demás peticiones, usar estrategia "Cache First, then Network"
+    // console.log('[SW] Evento: fetch. URL solicitada:', event.request.url);
     event.respondWith(
-        caches.match(event.request) // Intenta encontrar la petición en la caché actual
+        caches.match(event.request) // Intenta encontrar la petición en la caché
             .then((cachedResponse) => {
                 if (cachedResponse) {
                     // console.log('[SW] Sirviendo desde CACHÉ:', event.request.url);
                     return cachedResponse; // Si está en caché, la devuelve
                 }
+                
                 // console.log('[SW] No en caché, yendo a la RED:', event.request.url);
                 return fetch(event.request).then((networkResponse) => {
                     // Opcional: Si quieres cachear dinámicamente nuevos recursos que no estaban
-                    // en el App Shell, podrías abrir la caché y añadir la respuesta aquí.
-                    // Por ejemplo, para imágenes de cartas que se cargan después.
-                    // Ten cuidado de no llenar la caché con demasiadas cosas.
-                    // if (networkResponse.ok && event.request.method === 'GET' && event.request.url.startsWith(self.location.origin)) {
-                    //   const responseToCache = networkResponse.clone();
-                    //   caches.open(CACHE_NAME).then(cache => {
-                    //     cache.put(event.request, responseToCache);
-                    //   });
-                    // }
-                    return networkResponse; // Sirve desde la red
+                    // en el App Shell (ej. imágenes cargadas por el juego).
+                    // Asegúrate de que la respuesta es válida antes de cachearla.
+                    if (networkResponse && networkResponse.ok && event.request.method === 'GET' && event.request.url.startsWith(self.location.origin)) {
+                        const responseToCache = networkResponse.clone();
+                        caches.open(CACHE_NAME).then(cache => {
+                            // console.log('[SW] Cacheando dinámicamente:', event.request.url);
+                            cache.put(event.request, responseToCache);
+                        });
+                    }
+                    return networkResponse; // Sirve desde la red y opcionalmente la cachea
                 });
             })
             .catch(error => {
                 console.error('[SW] Error en fetch:', event.request.url, error);
-                // Aquí podrías devolver una página offline genérica si la tuvieras cacheada
-                // ej: return caches.match('/offline.html');
+                // Considera devolver una página offline genérica si una petición de navegación falla
+                // y tienes una página 'offline.html' cacheada.
+                // if (event.request.mode === 'navigate') {
+                //   return caches.match('./offline.html'); // Asegúrate que 'offline.html' está en APP_SHELL_RESOURCES
+                // }
             })
     );
 });
