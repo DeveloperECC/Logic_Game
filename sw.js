@@ -1,6 +1,6 @@
 // Logic_Game-main/sw.js
 
-const CACHE_NAME = 'logicgame-cache-v1.1'; // Incrementa la 'vX.X' si cambias los archivos cacheados
+const CACHE_NAME = 'logicgame-cache-v1.2'; // Incrementa la 'vX.X' si cambias los archivos cacheados
 
 // Lista de archivos que componen el "App Shell" y son cruciales para la carga inicial.
 // Asegúrate de que todas las rutas sean correctas desde la raíz de tu sitio.
@@ -23,7 +23,7 @@ const APP_SHELL_RESOURCES = [
     'assets/img/iconos/logicgame-icon-512x512.png',
 
     // Iconos importantes de la UI y favicon
-    'assets/img/iconos/info.png', // Tu favicon actual
+    'assets/img/iconos/foninfo.png', // Tu favicon actual
     'assets/img/iconos/inicio.png',
     'assets/img/iconos/juego.png',
     'assets/img/iconos/favoritos.png',
