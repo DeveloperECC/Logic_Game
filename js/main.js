@@ -7,8 +7,9 @@ import { mostrarInformacion } from './informacion.js';
 // --- REGISTRO DEL SERVICE WORKER ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // CAMBIO IMPORTANTE: Ruta correcta y scope para GitHub Pages con nombre de repositorio
-        navigator.serviceWorker.register('/Logic_Game/sw.js', { scope: '/Logic_Game/' })
+        // Usar ruta relativa al index.html para sw.js.
+        // El scope se inferirá correctamente al directorio donde está sw.js.
+        navigator.serviceWorker.register('./sw.js') 
             .then(registration => {
                 console.log('Service Worker registrado con éxito. Scope:', registration.scope);
                 registration.onupdatefound = () => {
@@ -35,6 +36,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // --- LÓGICA DE INICIALIZACIÓN DE LA APLICACIÓN Y NAVEGACIÓN ---
+// (El resto de tu lógica de main.js permanece exactamente igual que la proporcionaste)
 document.addEventListener('DOMContentLoaded', function() {
     const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
     const btnEmpezar = document.getElementById('btn-empezar');
@@ -53,11 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Cargando pantalla desde hash:", window.location.hash.substring(1));
         if (pantallaBienvenida) pantallaBienvenida.style.display = 'none';
         window.appCargarPantalla(window.location.hash.substring(1));
-    } else if (pantallaBienvenida && pantallaBienvenida.style.display !== 'none') { // Solo si está visible
+    } else if (pantallaBienvenida && pantallaBienvenida.style.display !== 'none') { 
         console.log("Mostrando pantalla de bienvenida.");
-        // No es necesario hacer nada aquí si ya está visible por defecto
     } else if (!pantallaBienvenida || pantallaBienvenida.style.display === 'none') {
-        // Si no hay bienvenida (o está oculta) y no hay hash, cargar inicio por defecto.
         console.log("No hay bienvenida (o está oculta) ni hash, cargando pantalla de inicio por defecto.");
         window.appCargarPantalla('inicio');
     }

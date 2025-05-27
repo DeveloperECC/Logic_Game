@@ -2,19 +2,18 @@
   "name": "Logic Game - Cartas Educativas",
   "short_name": "LogicGame",
   "description": "Aprende lógica y matemáticas con este divertido juego de cartas.",
-  "start_url": "./LOGIC_GAME/index.html",
+  "start_url": "./index.html",
   "scope": ".",
-  "scope": "/LOGIC_GAME/",             
   "display": "standalone",
   "background_color": "#f8f9fa",
-  "theme_color": "#3498db",
+  "theme_color": "#3498db",    
   "orientation": "portrait-primary",
   "icons": [
     {
       "src": "./assets/img/iconos/logicgame-icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any maskable" 
     },
     {
       "src": "./assets/img/iconos/logicgame-icon-512x512.png",
