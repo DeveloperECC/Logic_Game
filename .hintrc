@@ -18,6 +18,8 @@
           "backdrop-filter"
         ]
       }
-    ]
+    ],
+    "apple-touch-icons": "off",
+    "manifest-file-extension": "off"
   }
 }
